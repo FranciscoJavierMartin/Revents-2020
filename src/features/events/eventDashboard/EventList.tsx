@@ -1,17 +1,19 @@
 import React from 'react';
+import { IEvent } from '../../../app/interfaces';
 import EventListItem from './EventListItem';
 
 interface IEventListProps {
-  events: any[]
+  events: IEvent[];
+  selectEvent: (event: IEvent | null) => void;
+  deleteEvent: (id: string) => void;
 }
 
-const EventList: React.FC<IEventListProps> = ({events}) => {
+const EventList: React.FC<IEventListProps> = ({ events, selectEvent, deleteEvent }) => {
   return (
     <>
-    {events.map((event: any) => (
-      <EventListItem event={event} key={event.id}/>
-    ))}
-     
+      {events.map((event: IEvent) => (
+        <EventListItem event={event} key={event.id} selectEvent={selectEvent} deleteEvent={deleteEvent}/>
+      ))}
     </>
   );
 };

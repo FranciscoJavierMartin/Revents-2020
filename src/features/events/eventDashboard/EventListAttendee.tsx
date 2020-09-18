@@ -1,8 +1,9 @@
 import React from 'react';
 import { List, Image } from 'semantic-ui-react';
+import { IAttendee } from '../../../app/interfaces';
 
 interface IEventListAttendeeProps {
-  attendee: any;
+  attendee: IAttendee;
 }
 
 const EventListAttendee: React.FC<IEventListAttendeeProps> = ({ attendee }) => {

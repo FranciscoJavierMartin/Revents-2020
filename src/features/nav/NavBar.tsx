@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
 
 interface INavBarProps {
-  setFormOpen: (open: boolean) => void;
+  setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const NavBar: React.FC<INavBarProps> = ({ setFormOpen }) => {
