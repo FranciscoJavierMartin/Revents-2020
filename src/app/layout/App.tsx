@@ -1,35 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import NavBar from '../../features/nav/NavBar';
 import { Container } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
+import {
+  CREATE_EVENT_PAGE_ROUTE,
+  EVENTS_PAGE_ROUTE,
+  EVENT_DETAIL_PAGE_ROUTE,
+  HOME_PAGE_ROUTE,
+  MANAGE_EVENT_PAGE_ROUTE,
+} from '../constants/routes';
+import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
+import EventForm from '../../features/events/eventForm/EventForm';
+import Page404 from '../Page404/Page404';
 import './styles.scss';
-import { IEvent } from '../interfaces';
 
 function App() {
-  const [formOpen, setFormOpen] = useState<boolean>(true);
-  const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
-
-  function handleSelectEvent(event: IEvent | null): void {
-    setSelectedEvent(event);
-    setFormOpen(true);
-  }
-
-  function handleCreateFormOpen(): void {
-    setSelectedEvent(null);
-    setFormOpen(true);
-  }
-
   return (
     <React.Fragment>
-      <NavBar setFormOpen={setFormOpen} />
-      <Container className='main'>
-        <EventDashboard
-          formOpen={formOpen}
-          setFormOpen={setFormOpen}
-          selectEvent={handleSelectEvent}
-          selectedEvent={selectedEvent}
+      <Switch>
+        <Route exact component={HomePage} path={HOME_PAGE_ROUTE} />
+        <Route
+          path={'/(.+)'}
+          render={() => (
+            <>
+              <NavBar />
+              <Container className='main'>
+                <Route
+                  exact
+                  render={() => <EventDashboard />}
+                  path={EVENTS_PAGE_ROUTE}
+                />
+                <Route
+                  component={EventDetailedPage}
+                  path={`${EVENT_DETAIL_PAGE_ROUTE}/:id`}
+                />
+                <Route
+                  component={EventForm}
+                  path={[CREATE_EVENT_PAGE_ROUTE, MANAGE_EVENT_PAGE_ROUTE]}
+                />
+                <Route component={Page404} />
+              </Container>
+            </>
+          )}
         />
-      </Container>
+      </Switch>
     </React.Fragment>
   );
 }

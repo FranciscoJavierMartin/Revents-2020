@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Segment, Header, Form, Button } from 'semantic-ui-react';
 import cuid from 'cuid';
 import { IEvent } from '../../../app/interfaces';
+import { Link } from 'react-router-dom';
+import { HOME_PAGE_ROUTE } from '../../../app/constants/routes';
 
 interface IEventFormProps {
   setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -113,7 +115,8 @@ const EventForm: React.FC<IEventFormProps> = ({
           type='submit'
           floated='right'
           content='Cancel'
-          onClick={() => setFormOpen(false)}
+          as={Link}
+          to={HOME_PAGE_ROUTE}
         />
       </Form>
     </Segment>

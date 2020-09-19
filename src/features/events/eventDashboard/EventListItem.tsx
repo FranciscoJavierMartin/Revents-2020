@@ -1,17 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Segment, Item, Icon, List, Button } from 'semantic-ui-react';
+import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/constants/routes';
 import { IAttendee, IEvent } from '../../../app/interfaces';
 import EventListAttendee from './EventListAttendee';
 
 interface EventListItemProps {
   event: IEvent;
-  selectEvent: (event: IEvent | null) => void;
   deleteEvent: (id: string) => void;
 }
 
 const EventListItem: React.FC<EventListItemProps> = ({
   event,
-  selectEvent,
   deleteEvent,
 }) => {
   return (
@@ -49,10 +49,11 @@ const EventListItem: React.FC<EventListItemProps> = ({
           onClick={() => deleteEvent(event.id)}
         />
         <Button
+          as={Link}
+          to={`${EVENT_DETAIL_PAGE_ROUTE}/${event.id}`}
           color='teal'
           floated='right'
           content='View'
-          onClick={() => selectEvent(event)}
         />
       </Segment>
     </Segment.Group>
