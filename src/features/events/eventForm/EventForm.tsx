@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
 import { Segment, Header, Form, Button } from 'semantic-ui-react';
 import cuid from 'cuid';
-import { IEvent } from '../../../app/interfaces';
-import { Link } from 'react-router-dom';
-import { HOME_PAGE_ROUTE } from '../../../app/constants/routes';
+import { IEvent } from '../../../app/interfaces/models';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import {
+  EVENTS_PAGE_ROUTE,
+  HOME_PAGE_ROUTE,
+} from '../../../app/constants/routes';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../../app/interfaces/states';
+import { createEvent, updateEvent } from '../../../app/store/actions';
 
-interface IEventFormProps {
-  setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
-  createEvent: (event: IEvent) => void;
-  selectedEvent: IEvent | null;
-  updateEvent: (event: IEvent) => void;
+interface IEventFormParams {
+  id?: string;
 }
 
-const EventForm: React.FC<IEventFormProps> = ({
-  setFormOpen,
-  createEvent,
-  selectedEvent,
-  updateEvent,
-}) => {
-  const initialValues = selectedEvent ?? {
+interface IEventFormProps extends RouteComponentProps<IEventFormParams> {}
+
+const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
+  const event = useSelector<IRootState, IEvent | undefined>((state) =>
+    state.event.events.find((e) => e.id === match.params.id)
+  );
+  const dispatch = useDispatch();
+
+  const initialValues = event ?? {
     title: '',
     category: '',
     description: '',
@@ -33,18 +37,23 @@ const EventForm: React.FC<IEventFormProps> = ({
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
 
-    selectedEvent
-      ? updateEvent({
-          ...selectedEvent,
-          ...values,
-        })
-      : createEvent({
-          ...values,
-          id: cuid(),
-          hostedBy: 'Bob',
-          attendees: [],
-          hostPhotoURL: '/assets/user.png',
-        });
+    event
+      ? dispatch(
+          updateEvent({
+            ...event,
+            ...values,
+          })
+        )
+      : dispatch(
+          createEvent({
+            ...values,
+            id: cuid(),
+            hostedBy: 'Bob',
+            attendees: [],
+            hostPhotoURL: '/assets/user.png',
+          })
+        );
+    history.push(EVENTS_PAGE_ROUTE);
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -54,7 +63,7 @@ const EventForm: React.FC<IEventFormProps> = ({
 
   return (
     <Segment clearing>
-      <Header content={selectedEvent ? 'Edit event' : 'Create new event'} />
+      <Header content={event ? 'Edit event' : 'Create new event'} />
       <Form onSubmit={handleFormSubmit}>
         <Form.Field>
           <input

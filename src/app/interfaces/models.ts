@@ -8,11 +8,11 @@ export interface IEvent {
   date: string;
   hostedBy: string;
   hostPhotoURL: string;
-  attendees: IAttendee[];
+  attendees: IAttendant[];
 }
 
-export interface IAttendee {
+export interface IAttendant {
   id: string;
-  name: string;
+  displayName: string;
   photoURL: string;
 }

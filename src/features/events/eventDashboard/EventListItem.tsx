@@ -1,19 +1,21 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Segment, Item, Icon, List, Button } from 'semantic-ui-react';
 import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/constants/routes';
-import { IAttendee, IEvent } from '../../../app/interfaces';
+import { IAttendant, IEvent } from '../../../app/interfaces/models';
+import { deleteEvent } from '../../../app/store/actions';
 import EventListAttendee from './EventListAttendee';
 
 interface EventListItemProps {
   event: IEvent;
-  deleteEvent: (id: string) => void;
 }
 
 const EventListItem: React.FC<EventListItemProps> = ({
-  event,
-  deleteEvent,
+  event
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <Segment.Group>
       <Segment>
@@ -35,7 +37,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
       </Segment>
       <Segment secondary>
         <List horizontal>
-          {event.attendees.map((attendee: IAttendee) => (
+          {event.attendees.map((attendee: IAttendant) => (
             <EventListAttendee key={attendee.id} attendee={attendee} />
           ))}
         </List>
@@ -46,7 +48,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
           color='red'
           floated='right'
           content='Delete'
-          onClick={() => deleteEvent(event.id)}
+          onClick={() => dispatch(deleteEvent(event))}
         />
         <Button
           as={Link}

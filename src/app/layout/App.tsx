@@ -2,7 +2,7 @@ import React from 'react';
 import EventDashboard from '../../features/events/eventDashboard/EventDashboard';
 import NavBar from '../../features/nav/NavBar';
 import { Container } from 'semantic-ui-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import {
   CREATE_EVENT_PAGE_ROUTE,
@@ -17,6 +17,8 @@ import Page404 from '../Page404/Page404';
 import './styles.scss';
 
 function App() {
+  const { key } = useLocation();
+
   return (
     <React.Fragment>
       <Switch>
@@ -38,13 +40,17 @@ function App() {
                 />
                 <Route
                   component={EventForm}
-                  path={[CREATE_EVENT_PAGE_ROUTE, MANAGE_EVENT_PAGE_ROUTE]}
+                  key={key}
+                  path={[
+                    CREATE_EVENT_PAGE_ROUTE,
+                    `${MANAGE_EVENT_PAGE_ROUTE}/:id`,
+                  ]}
                 />
-                <Route component={Page404} />
               </Container>
             </>
           )}
         />
+        <Route component={Page404} />
       </Switch>
     </React.Fragment>
   );

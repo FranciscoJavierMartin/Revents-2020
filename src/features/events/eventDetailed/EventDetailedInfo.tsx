@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button, Grid, Icon, Segment } from 'semantic-ui-react';
+import { IEvent } from '../../../app/interfaces/models';
 
-const EventDetailedInfo = () => {
+interface IEventDetailedInfoProps {
+  event: IEvent;
+}
+
+const EventDetailedInfo: React.FC<IEventDetailedInfoProps> = ({ event }) => {
   return (
     <Segment.Group>
       <Segment attached='top'>
@@ -10,7 +15,7 @@ const EventDetailedInfo = () => {
             <Icon size='large' color='teal' name='info' />
           </Grid.Column>
           <Grid.Column width={15}>
-            <p>Event description</p>
+            <p>{event.description}</p>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -20,7 +25,7 @@ const EventDetailedInfo = () => {
             <Icon name='calendar' size='large' color='teal' />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span>Event date</span>
+            <span>{event.date}</span>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -30,7 +35,7 @@ const EventDetailedInfo = () => {
             <Icon name='marker' size='large' color='teal' />
           </Grid.Column>
           <Grid.Column width={11}>
-            <span>Event Venue</span>
+            <span>{event.venue}</span>
           </Grid.Column>
           <Grid.Column width={4}>
             <Button color='teal' size='tiny' content='Show Map' />

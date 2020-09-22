@@ -1,26 +1,46 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
+import { NOT_FOUND } from '../../../app/constants/routes';
+import { IEvent } from '../../../app/interfaces/models';
+import { IRootState } from '../../../app/interfaces/states';
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';
 import EventDetailedSidebar from './EventDetailedSidebar';
 
-interface IEventDetailedPageProps extends RouteComponentProps {}
+interface IEventDetailedPageParams {
+  id: string;
+}
 
-const EventDetailedPage: React.FC<IEventDetailedPageProps> = () => {
-  return (
+interface IEventDetailedPageProps
+  extends RouteComponentProps<IEventDetailedPageParams> {}
+
+const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({
+  match,
+  history,
+}) => {
+  const event = useSelector<IRootState, IEvent | undefined>((state) =>
+    state.event.events.find((evt) => evt.id === match.params.id)
+  );
+
+  if (!event) {
+    history.push(NOT_FOUND);
+  }
+
+  return event ? (
     <Grid>
       <Grid.Column width={10}>
-        <EventDetailedHeader />
-        <EventDetailedInfo />
+        <EventDetailedHeader event={event} />
+        <EventDetailedInfo event={event} />
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar />
+        <EventDetailedSidebar attendess={event.attendees!!} />
       </Grid.Column>
     </Grid>
-  );
+  ) : null;
 };
 
 export default EventDetailedPage;

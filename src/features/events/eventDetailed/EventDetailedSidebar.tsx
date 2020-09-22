@@ -1,7 +1,14 @@
 import React from 'react';
 import { Item, Segment } from 'semantic-ui-react';
+import { IAttendant } from '../../../app/interfaces/models';
 
-const EventDetailedSidebar = () => {
+interface IEventDetailSidebarProps {
+  attendess: IAttendant[];
+}
+
+const EventDetailedSidebar: React.FC<IEventDetailSidebarProps> = ({
+  attendess,
+}) => {
   return (
     <>
       <Segment
@@ -12,26 +19,23 @@ const EventDetailedSidebar = () => {
         inverted
         color='teal'
       >
-        2 People going
+        {attendess.length} {attendess.length > 1 ? 'People' : 'Person'} going
       </Segment>
       <Segment attached>
         <Item.Group relaxed divided>
-          <Item style={{ position: 'relative' }}>
-            <Item.Image size='tiny' src='/assets/user.png' />
-            <Item.Content verticalAlign='middle'>
-              <Item.Header as='h3'>
-                <span>Tom</span>
-              </Item.Header>
-            </Item.Content>
-          </Item>
-          <Item style={{ position: 'relative' }}>
-            <Item.Image size='tiny' src='/assets/user.png' />
-            <Item.Content verticalAlign='middle'>
-              <Item.Header as='h3'>
-                <span>Bob</span>
-              </Item.Header>
-            </Item.Content>
-          </Item>
+          {attendess.map((attendant) => (
+            <Item key={attendant.id} style={{ position: 'relative' }}>
+              <Item.Image
+                size='tiny'
+                src={attendant.photoURL || '/assets/user.png'}
+              />
+              <Item.Content verticalAlign='middle'>
+                <Item.Header as='h3'>
+                  <span>{attendant.displayName}</span>
+                </Item.Header>
+              </Item.Content>
+            </Item>
+          ))}
         </Item.Group>
       </Segment>
     </>
