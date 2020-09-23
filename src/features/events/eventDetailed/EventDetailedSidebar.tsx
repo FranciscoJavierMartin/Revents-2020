@@ -1,6 +1,6 @@
 import React from 'react';
 import { Item, Segment } from 'semantic-ui-react';
-import { IAttendant } from '../../../app/interfaces/models';
+import { IAttendant } from '../../../app/common/interfaces/models';
 
 interface IEventDetailSidebarProps {
   attendess: IAttendant[];

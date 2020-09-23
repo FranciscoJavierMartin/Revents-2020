@@ -5,7 +5,7 @@ export interface IEvent {
   description: string;
   city: string;
   venue: string;
-  date: string;
+  date: Date;
   hostedBy: string;
   hostPhotoURL: string;
   attendees: IAttendant[];

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
-import { MANAGE_EVENT_PAGE_ROUTE } from '../../../app/constants/routes';
-import { IEvent } from '../../../app/interfaces/models';
+import { MANAGE_EVENT_PAGE_ROUTE } from '../../../app/common/constants/routes';
+import { IEvent } from '../../../app/common/interfaces/models';
+import { format } from 'date-fns';
 
 const eventImageStyle = {
   filter: 'brightness(30%)',
@@ -42,7 +43,7 @@ const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
                   content='Event title'
                   style={{ color: 'white' }}
                 />
-                <p>{event.date}</p>
+                <p>{format(event.date, 'MMMM d, yyyy h:mm a')}</p>
                 <p>
                   Hosted by <strong>{event.hostedBy}</strong>
                 </p>

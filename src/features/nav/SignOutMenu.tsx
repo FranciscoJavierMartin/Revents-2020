@@ -1,18 +1,22 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Menu, Button } from 'semantic-ui-react';
+import { openModal } from '../../app/store/modal/modalActions';
 
 interface ISignOutMenuProps {
-  signOut: () => void;
+  
 }
 
-const SignOutMenu: React.FC<ISignOutMenuProps> = ({ signOut }) => {
+const SignOutMenu: React.FC<ISignOutMenuProps> = () => {
+  const dispatch = useDispatch();
+
   return (
     <Menu.Item position='right'>
       <Button
         basic
         inverted
         content='Login'
-        onClick={() => signOut()}
+        onClick={() => dispatch(openModal({ modalType: 'LoginForm' }))}
       />
       <Button
         basic

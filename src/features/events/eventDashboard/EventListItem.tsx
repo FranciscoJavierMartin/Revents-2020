@@ -2,18 +2,17 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Segment, Item, Icon, List, Button } from 'semantic-ui-react';
-import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/constants/routes';
-import { IAttendant, IEvent } from '../../../app/interfaces/models';
-import { deleteEvent } from '../../../app/store/actions';
+import { format } from 'date-fns';
+import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/common/constants/routes';
+import { IAttendant, IEvent } from '../../../app/common/interfaces/models';
+import { deleteEvent } from '../../../app/store/events/eventActions';
 import EventListAttendee from './EventListAttendee';
 
 interface EventListItemProps {
   event: IEvent;
 }
 
-const EventListItem: React.FC<EventListItemProps> = ({
-  event
-}) => {
+const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
   const dispatch = useDispatch();
 
   return (
@@ -31,13 +30,13 @@ const EventListItem: React.FC<EventListItemProps> = ({
       </Segment>
       <Segment>
         <span>
-          <Icon name='clock' /> {event.date}
+          <Icon name='clock' /> {event.date && format(event.date, 'MMMM d, yyyy h:mm a')}
           <Icon name='marker' /> {event.venue}
         </span>
       </Segment>
       <Segment secondary>
         <List horizontal>
-          {event.attendees.map((attendee: IAttendant) => (
+          {event.attendees && event.attendees.map((attendee: IAttendant) => (
             <EventListAttendee key={attendee.id} attendee={attendee} />
           ))}
         </List>

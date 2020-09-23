@@ -1,5 +1,5 @@
 import React from 'react';
-import { IEvent } from '../../../app/interfaces/models';
+import { IEvent } from '../../../app/common/interfaces/models';
 import EventListItem from './EventListItem';
 
 interface IEventListProps {

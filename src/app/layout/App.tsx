@@ -10,17 +10,19 @@ import {
   EVENT_DETAIL_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
   MANAGE_EVENT_PAGE_ROUTE,
-} from '../constants/routes';
+} from '../common/constants/routes';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
 import EventForm from '../../features/events/eventForm/EventForm';
 import Page404 from '../Page404/Page404';
 import './styles.scss';
+import ModalManager from '../common/modals/ModalManager';
 
 function App() {
   const { key } = useLocation();
 
   return (
     <React.Fragment>
+      <ModalManager/>
       <Switch>
         <Route exact component={HomePage} path={HOME_PAGE_ROUTE} />
         <Route

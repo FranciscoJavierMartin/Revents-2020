@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Image } from 'semantic-ui-react';
-import { IAttendant } from '../../../app/interfaces/models';
+import { IAttendant } from '../../../app/common/interfaces/models';
 
 interface IEventListAttendeeProps {
   attendee: IAttendant;

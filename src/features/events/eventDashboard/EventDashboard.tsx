@@ -1,9 +1,9 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import EventList from './EventList';
-import { IEvent } from '../../../app/interfaces/models';
+import { IEvent } from '../../../app/common/interfaces/models';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../app/interfaces/states';
+import { IRootState } from '../../../app/common/interfaces/states';
 
 interface IEventDashboardProps {}
 
