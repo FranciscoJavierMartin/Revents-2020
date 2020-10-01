@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Container,
   Header,
@@ -8,6 +8,7 @@ import {
   Button,
   Icon,
 } from 'semantic-ui-react';
+import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 
 interface IHomePageProps extends RouteComponentProps {}
 
@@ -23,7 +24,7 @@ const HomePage: React.FC<IHomePageProps> = () => {
           />
           Re-vents
         </Header>
-        <Button size='huge' inverted>
+        <Button size='huge' inverted as={Link} to={EVENTS_PAGE_ROUTE}>
           Get Started
           <Icon name='arrow right' inverted />
         </Button>

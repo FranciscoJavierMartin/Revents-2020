@@ -31,6 +31,7 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
       <Segment>
         <span>
           <Icon name='clock' /> {event.date && format(event.date, 'MMMM d, yyyy h:mm a')}
+          {/*<Icon name='marker' /> {event.venue.address}*/}
           <Icon name='marker' /> {event.venue}
         </span>
       </Segment>

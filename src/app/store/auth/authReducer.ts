@@ -18,7 +18,6 @@ export default function authReducer(
 
   switch (type) {
     case authActionName.SIGN_IN_USER:
-      debugger;
       res = {
         ...state,
         authenticated: true,

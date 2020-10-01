@@ -1,3 +1,4 @@
+/* global google */
 import React from 'react';
 import { Segment, Header, Button } from 'semantic-ui-react';
 import { Formik, Form } from 'formik';
@@ -10,13 +11,17 @@ import {
 } from '../../../app/common/constants/routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../app/common/interfaces/states';
-import { createEvent, updateEvent } from '../../../app/store/events/eventActions';
+import {
+  createEvent,
+  updateEvent,
+} from '../../../app/store/events/eventActions';
 import * as Yup from 'yup';
 import InputText from '../../../app/common/form/InputText';
 import InputTextArea from '../../../app/common/form/InputTextArea';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { categoryData } from '../../../app/api/categoryOptions';
 import DateInput from '../../../app/common/form/DateInput';
+import PlaceInput from '../../../app/common/form/PlaceInput';
 
 interface IEventFormParams {
   id?: string;
@@ -34,6 +39,14 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
     title: '',
     category: '',
     description: '',
+    /*city: {
+      address: '',
+      latLng: null,
+    },
+    venue: {
+      address: '',
+      latLng: null,
+    },*/
     city: '',
     venue: '',
     date: '',
@@ -43,8 +56,14 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
     title: Yup.string().required('You must provide a valid title'),
     category: Yup.string().required('You must provide a valid category'),
     description: Yup.string().required('You must provide a valid description'),
-    city: Yup.string().required('You must provide a valid city'),
-    venue: Yup.string().required('You must provide a valid venue'),
+    city: Yup.string().required('City is required'),
+    venue: Yup.string().required('Venue is required'),
+    /*city: Yup.object().shape({
+      address: Yup.string().required('City is required'),
+    }),
+    venue: Yup.object().shape({
+      address: Yup.string().required('Venue is required'),
+    }),*/
     date: Yup.string().required('You must provide a valid date'),
   });
 
@@ -74,7 +93,7 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
           history.push(EVENTS_PAGE_ROUTE);
         }}
       >
-        {({ isSubmitting, dirty, isValid }) => (
+        {({ isSubmitting, dirty, isValid, values }) => (
           <Form className='ui form'>
             <Header sub color='teal' content='Event details' />
             <InputText name='title' placeholder='Event title' />
@@ -88,8 +107,20 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
               placeholder='Event description'
               row={3}
             />
+            <Header sub color='teal' content='Event Location Details' />
             <InputText name='city' placeholder='Event city' />
             <InputText name='venue' placeholder='Event venue' />
+            {/*<PlaceInput name='city' placeholder='Event city' />
+            <PlaceInput
+              name='venue'
+              placeholder='Event venue'
+              disabled={!values.city.latLng}
+              options={{
+                location: new google.maps.LatLng(values.city.latLng),
+                radius: 1000,
+                types: ['establishment'],
+              }}
+            />*/}
             <DateInput
               name='date'
               placeholderText='Event date'

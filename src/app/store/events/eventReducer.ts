@@ -1,4 +1,5 @@
 import { IEventsState } from '../../common/interfaces/states';
+//import { sampleData } from '../../api/sampleDataWithCoords';
 import { sampleData } from '../../api/sampleData';
 import { IEventAction } from '../../common/interfaces/actions';
 import { eventActionsName } from '../../common/constants/actionsNames';
@@ -12,7 +13,6 @@ export default function eventReducer(
   { type, payload }: IEventAction
 ): IEventsState {
   let res: IEventsState = state;
-  debugger
   switch (type) {
     case eventActionsName.CREATE_EVENT:
       
