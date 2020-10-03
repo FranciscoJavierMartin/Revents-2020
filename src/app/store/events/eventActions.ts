@@ -2,6 +2,14 @@ import { eventActionsName } from '../../common/constants/actionsNames';
 import { IEventAction } from '../../common/interfaces/actions';
 import { IEvent } from '../../common/interfaces/models';
 
+export function listenToEvents(events: any[]){
+  console.log(events);
+  return {
+    type: eventActionsName.FETCH_EVENTS,
+    payload: events,
+  }
+}
+
 export function createEvent(event: IEvent): IEventAction {
   return {
     type: eventActionsName.CREATE_EVENT,

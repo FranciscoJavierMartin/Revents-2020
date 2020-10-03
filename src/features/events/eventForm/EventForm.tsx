@@ -1,27 +1,33 @@
 /* global google */
-import React from 'react';
-import { Segment, Header, Button } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Segment, Header, Button, Confirm } from 'semantic-ui-react';
 import { Formik, Form } from 'formik';
-import cuid from 'cuid';
 import { IEvent } from '../../../app/common/interfaces/models';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import {
+  ERROR_PAGE,
   EVENTS_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
 } from '../../../app/common/constants/routes';
 import { useDispatch, useSelector } from 'react-redux';
-import { IRootState } from '../../../app/common/interfaces/states';
-import {
-  createEvent,
-  updateEvent,
-} from '../../../app/store/events/eventActions';
+import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
+import { listenToEvents } from '../../../app/store/events/eventActions';
 import * as Yup from 'yup';
 import InputText from '../../../app/common/form/InputText';
 import InputTextArea from '../../../app/common/form/InputTextArea';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { categoryData } from '../../../app/api/categoryOptions';
 import DateInput from '../../../app/common/form/DateInput';
-import PlaceInput from '../../../app/common/form/PlaceInput';
+//import PlaceInput from '../../../app/common/form/PlaceInput';
+import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+import {
+  addEventToFirestore,
+  cancelEventToggle,
+  listenToEventFromFirestore,
+  updateEventInFirestore,
+} from '../../../app/api/firestoreService';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { toast } from 'react-toastify';
 
 interface IEventFormParams {
   id?: string;
@@ -30,10 +36,13 @@ interface IEventFormParams {
 interface IEventFormProps extends RouteComponentProps<IEventFormParams> {}
 
 const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
+  const dispatch = useDispatch();
+  const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
+  const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
   const event = useSelector<IRootState, IEvent | undefined>((state) =>
     state.event.events.find((e) => e.id === match.params.id)
   );
-  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector<IRootState, IAsyncState>((state) => state.async);
 
   const initialValues: any = event ?? {
     title: '',
@@ -67,30 +76,46 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
     date: Yup.string().required('You must provide a valid date'),
   });
 
-  return (
+  async function handleCancelToggle(event: IEvent) {
+    setConfirmOpen(false);
+    setLoadingCancel(true);
+
+    try {
+      await cancelEventToggle(event);
+      setLoadingCancel(false);
+    } catch (error) {
+      setLoadingCancel(true);
+      toast.error(error.message);
+    }
+  }
+
+  useFirestoreDoc({
+    query: () => listenToEventFromFirestore(match.params.id),
+    data: (event: any) => dispatch(listenToEvents([event])),
+    deps: [match.params.id, dispatch],
+    shouldExecute: !!match.params.id,
+  });
+
+  return isLoading ? (
+    <LoadingComponent content='Loading event ...' />
+  ) : error ? (
+    <Redirect to={ERROR_PAGE} />
+  ) : (
     <Segment clearing>
       <Header content={event ? 'Edit event' : 'Create new event'} />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          event
-            ? dispatch(
-                updateEvent({
-                  ...event,
-                  ...values,
-                })
-              )
-            : dispatch(
-                createEvent({
-                  ...values,
-                  id: cuid(),
-                  hostedBy: 'Bob',
-                  attendees: [],
-                  hostPhotoURL: '/assets/user.png',
-                })
-              );
-          history.push(EVENTS_PAGE_ROUTE);
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            event
+              ? await updateEventInFirestore(values)
+              : await addEventToFirestore(values);
+            history.push(EVENTS_PAGE_ROUTE);
+          } catch (error) {
+            toast.error(error.message);
+            setSubmitting(false);
+          }
         }}
       >
         {({ isSubmitting, dirty, isValid, values }) => (
@@ -129,6 +154,18 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
               timeCaption='time'
               dateFormat='MMMM d, yyyy h:mm a'
             />
+            {event && (
+              <Button
+                loading={loadingCancel}
+                type='button'
+                floated='left'
+                color={event?.isCancelled ? 'green' : 'red'}
+                content={
+                  event?.isCancelled ? 'Reactivate event' : 'Cancel event'
+                }
+                onClick={() => setConfirmOpen(true)}
+              />
+            )}
             <Button
               loading={isSubmitting}
               disabled={!isValid || !dirty || isSubmitting}
@@ -148,6 +185,16 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
           </Form>
         )}
       </Formik>
+      <Confirm
+        content={
+          event?.isCancelled
+            ? 'This will reactivate the event. Are you sure?'
+            : 'This will cancel the event. Are you sure?'
+        }
+        open={confirmOpen}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={() => handleCancelToggle(event!!)}
+      />
     </Segment>
   );
 };

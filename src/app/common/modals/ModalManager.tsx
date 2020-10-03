@@ -8,12 +8,13 @@ const ModalManager:React.FC = () => {
     LoginForm
   };
   const currentModal = useSelector<IRootState, any>(state => state.modal);
-  let renderedModal;
+  let renderedModal = null;
 
   if(currentModal){
     const {modalType, modalProps} = currentModal;
     const ModalComponent = modalLookup[modalType];
-    renderedModal = <ModalComponent {...modalProps}/>
+    // renderedModal = <ModalComponent {...modalProps}/>
+    renderedModal = <h1>Hello world</h1>
   }
 
   return (

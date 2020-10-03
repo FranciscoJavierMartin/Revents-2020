@@ -22,7 +22,7 @@ export default function authReducer(
         ...state,
         authenticated: true,
         currentUser: {
-          email: payload.email,
+          email: payload?.email,
           photoURL: '/assets/user.png',
         },
       };

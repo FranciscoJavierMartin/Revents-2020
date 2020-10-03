@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/layout/App';
-import * as serviceWorker from './serviceWorker';
-import 'semantic-ui-css/semantic.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+
+import App from './app/layout/App';
 import { configureStore } from './app/store/configureStore';
 import ScrollToTop from './app/layout/ScrollToTop';
+
+import 'semantic-ui-css/semantic.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import 'react-calendar/dist/Calendar.css';
+
+import * as serviceWorker from './serviceWorker';
 
 const store = configureStore();
 

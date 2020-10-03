@@ -4,6 +4,7 @@ export interface IRootState {
   event: IEventsState;
   modal: IModalState;
   auth: IAuthState;
+  async: IAsyncState;
 }
 
 export interface IEventsState {
@@ -15,4 +16,9 @@ export interface IModalState {}
 export interface IAuthState {
   authenticated: boolean;
   currentUser: any;
+}
+
+export interface IAsyncState {
+  isLoading: boolean;
+  error: any;
 }

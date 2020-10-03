@@ -1,10 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import { NOT_FOUND } from '../../../app/common/constants/routes';
+import { listenToEventFromFirestore } from '../../../app/api/firestoreService';
+import { ERROR_PAGE } from '../../../app/common/constants/routes';
 import { IEvent } from '../../../app/common/interfaces/models';
-import { IRootState } from '../../../app/common/interfaces/states';
+import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
+import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { listenToEvents } from '../../../app/store/events/eventActions';
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';
@@ -19,28 +23,38 @@ interface IEventDetailedPageProps
 
 const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({
   match,
-  history,
 }) => {
+  const dispatch = useDispatch();
   const event = useSelector<IRootState, IEvent | undefined>((state) =>
-    state.event.events.find((evt) => evt.id === match.params.id)
+    state.event.events?.find((evt) => evt.id === match.params.id)
   );
 
-  if (!event) {
-    history.push(NOT_FOUND);
-  }
+  const { error, isLoading } = useSelector<IRootState, IAsyncState>(
+    (state) => state.async
+  );
 
-  return event ? (
+  useFirestoreDoc({
+    query: () => listenToEventFromFirestore(match.params.id),
+    data: (event: any) => dispatch(listenToEvents([event])),
+    deps: [match.params.id, dispatch],
+  });
+
+  return isLoading || (!event && !error) ? (
+    <LoadingComponent content='Loading event ...' />
+  ) : error ? (
+    <Redirect to={ERROR_PAGE} />
+  ) : (
     <Grid>
       <Grid.Column width={10}>
-        <EventDetailedHeader event={event} />
-        <EventDetailedInfo event={event} />
+        <EventDetailedHeader event={event!!} />
+        <EventDetailedInfo event={event!!} />
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendess={event.attendees!!} />
+        <EventDetailedSidebar attendess={event?.attendees!!} />
       </Grid.Column>
     </Grid>
-  ) : null;
+  );
 };
 
 export default EventDetailedPage;

@@ -1,6 +1,6 @@
 import { modalActionName } from '../../common/constants/actionsNames';
 
-export function openModal(payload?: any) {
+export function openModal(payload: any) {
   return {
     type: modalActionName.OPEN_MODAL,
     payload,

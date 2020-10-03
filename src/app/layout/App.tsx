@@ -3,9 +3,11 @@ import EventDashboard from '../../features/events/eventDashboard/EventDashboard'
 import NavBar from '../../features/nav/NavBar';
 import { Container } from 'semantic-ui-react';
 import { Route, Switch, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 import {
   CREATE_EVENT_PAGE_ROUTE,
+  ERROR_PAGE,
   EVENTS_PAGE_ROUTE,
   EVENT_DETAIL_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
@@ -16,13 +18,15 @@ import EventForm from '../../features/events/eventForm/EventForm';
 import Page404 from '../Page404/Page404';
 import './styles.scss';
 import ModalManager from '../common/modals/ModalManager';
+import ErrorComponent from '../common/errors/ErrorComponent';
 
 function App() {
   const { key } = useLocation();
 
   return (
     <React.Fragment>
-      <ModalManager/>
+      <ModalManager />
+      <ToastContainer position='bottom-right' hideProgressBar/>
       <Switch>
         <Route exact component={HomePage} path={HOME_PAGE_ROUTE} />
         <Route
@@ -48,6 +52,7 @@ function App() {
                     `${MANAGE_EVENT_PAGE_ROUTE}/:id`,
                   ]}
                 />
+                <Route path={ERROR_PAGE} component={ErrorComponent}/>
               </Container>
             </>
           )}

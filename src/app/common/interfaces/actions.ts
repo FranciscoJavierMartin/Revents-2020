@@ -1,9 +1,10 @@
+import { asyncActionName } from './../constants/actionsNames';
 import { authActionName, eventActionsName, modalActionName } from '../constants/actionsNames';
 import { IEvent } from './models';
 
 export interface IEventAction {
   type: eventActionsName;
-  payload?: IEvent;
+  payload?: any;
 }
 
 export interface IModalAction {
@@ -13,5 +14,10 @@ export interface IModalAction {
 
 export interface IAuthAction {
   type: authActionName;
+  payload?: any;
+}
+
+export interface IAsyncAction {
+  type: asyncActionName;
   payload?: any;
 }

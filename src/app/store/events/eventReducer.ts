@@ -1,11 +1,11 @@
 import { IEventsState } from '../../common/interfaces/states';
 //import { sampleData } from '../../api/sampleDataWithCoords';
-import { sampleData } from '../../api/sampleData';
+//import { sampleData } from '../../api/sampleData';
 import { IEventAction } from '../../common/interfaces/actions';
 import { eventActionsName } from '../../common/constants/actionsNames';
 
 const initialState: IEventsState = {
-  events: sampleData,
+  events: [],
 };
 
 export default function eventReducer(
@@ -14,8 +14,13 @@ export default function eventReducer(
 ): IEventsState {
   let res: IEventsState = state;
   switch (type) {
+    case eventActionsName.FETCH_EVENTS:
+      res = {
+        ...state,
+        events: payload,
+      };
+      break;
     case eventActionsName.CREATE_EVENT:
-      
       if (payload) {
         res = {
           ...state,
