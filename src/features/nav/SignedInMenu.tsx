@@ -1,22 +1,31 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Menu, Dropdown, Image } from 'semantic-ui-react';
+import { signOutFirebase } from '../../app/api/firestore/firebaseService';
 import {
   CREATE_EVENT_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
 } from '../../app/common/constants/routes';
 import { IAuthState, IRootState } from '../../app/common/interfaces/states';
-import { signOutUser } from '../../app/store/auth/authActions';
 
 interface ISignInMenuProps {}
 
 const SignInMenu: React.FC<ISignInMenuProps> = () => {
-  const dispath = useDispatch();
   const { currentUser } = useSelector<IRootState, IAuthState>(
     (state) => state.auth
   );
   const history = useHistory();
+
+  async function handleSignOut() {
+    try {
+      await signOutFirebase();
+      history.push(HOME_PAGE_ROUTE);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
 
   return (
     <Menu.Item position='right'>
@@ -34,14 +43,7 @@ const SignInMenu: React.FC<ISignInMenuProps> = () => {
             icon='plus'
           />
           <Dropdown.Item text='My profile' icon='user' />
-          <Dropdown.Item
-            text='Sign out'
-            icon='power'
-            onClick={() => {
-              dispath(signOutUser());
-              history.push(HOME_PAGE_ROUTE);
-            }}
-          />
+          <Dropdown.Item text='Sign out' icon='power' onClick={handleSignOut} />
         </Dropdown.Menu>
       </Dropdown>
     </Menu.Item>

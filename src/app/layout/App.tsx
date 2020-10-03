@@ -13,6 +13,7 @@ import {
   HOME_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
   MANAGE_EVENT_PAGE_ROUTE,
+  REGISTER_PAGE_ROUTE,
 } from '../common/constants/routes';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
 import EventForm from '../../features/events/eventForm/EventForm';
@@ -20,6 +21,7 @@ import Page404 from '../Page404/Page404';
 import './styles.scss';
 import ErrorComponent from '../common/errors/ErrorComponent';
 import LoginPage from '../../features/auth/LoginPage';
+import RegisterPage from '../../features/auth/RegisterPage';
 
 function App() {
   const { key } = useLocation();
@@ -53,6 +55,7 @@ function App() {
                   ]}
                 />
                 <Route path={LOGIN_PAGE_ROUTE} component={LoginPage}/>
+                <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage}/>
                 <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent}/>
               </Container>
             </>

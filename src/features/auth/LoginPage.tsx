@@ -1,11 +1,11 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Formik, Form, FormikHelpers } from 'formik';
 import { Button } from 'semantic-ui-react';
 import InputText from '../../app/common/form/InputText';
 import * as Yup from 'yup';
-import { signInUser } from '../../app/store/auth/authActions';
-import { useDispatch } from 'react-redux';
 import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
+import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 
 interface IFormValues {
   email: string;
@@ -13,7 +13,7 @@ interface IFormValues {
 }
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const validationSchema = Yup.object({
     email: Yup.string().required().email(),
     password: Yup.string().required(),
@@ -30,10 +30,10 @@ const LoginPage = () => {
           try {
             await signInWithEmailAndPassword(values.email, values.password);
             setSubmitting(false);
+            history.push(EVENTS_PAGE_ROUTE);
           } catch (error) {
             console.log(error);
           }
-          // dispatch(closeModal());
         }}
       >
         {({ isSubmitting, isValid, dirty }) => (

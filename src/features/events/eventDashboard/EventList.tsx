@@ -6,12 +6,12 @@ interface IEventListProps {
   events: IEvent[];
 }
 
-const EventList: React.FC<IEventListProps> = ({ events }) => {
+const EventList: React.FC<IEventListProps> = ({ events = [] }) => {
   console.log(events);
   return (
     <>
       {events.map((event: IEvent) => (
-        <EventListItem event={event} key={event.id}/>
+        <EventListItem event={event} key={event.id} />
       ))}
     </>
   );

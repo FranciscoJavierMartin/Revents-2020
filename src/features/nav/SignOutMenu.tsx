@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Button } from 'semantic-ui-react';
-import { LOGIN_PAGE_ROUTE } from '../../app/common/constants/routes';
+import {
+  LOGIN_PAGE_ROUTE,
+  REGISTER_PAGE_ROUTE,
+} from '../../app/common/constants/routes';
 
 interface ISignOutMenuProps {}
 
@@ -14,6 +17,8 @@ const SignOutMenu: React.FC<ISignOutMenuProps> = () => {
         inverted
         content='Register'
         style={{ marginLeft: '0.5em' }}
+        as={Link}
+        to={REGISTER_PAGE_ROUTE}
       />
     </Menu.Item>
   );
