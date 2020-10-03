@@ -1,29 +1,27 @@
 import React from 'react';
 import { Formik, Form, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-import ModalWrapper from '../../app/common/modals/ModalWrapper';
-import InputText from '../../app/common/form/InputText';
 import { Button } from 'semantic-ui-react';
-import { useDispatch } from 'react-redux';
+import InputText from '../../app/common/form/InputText';
+import * as Yup from 'yup';
 import { signInUser } from '../../app/store/auth/authActions';
-import { closeModal } from '../../app/store/modal/modalActions';
+import { useDispatch } from 'react-redux';
 
 interface IFormValues {
   email: string;
   password: string;
 }
 
-const LoginForm: React.FC = () => {
+const LoginPage = () => {
   const dispatch = useDispatch();
-
+  const validationSchema = Yup.object({
+    email: Yup.string().required().email(),
+    password: Yup.string().required(),
+  })
   return (
-    <ModalWrapper size='mini' header='Sign in to Re-vents'>
+    <div>
       <Formik
         initialValues={{ email: '', password: '' }}
-        validationSchema={Yup.object({
-          email: Yup.string().required().email(),
-          password: Yup.string().required(),
-        })}
+        validationSchema={validationSchema}
         onSubmit={(
           values: IFormValues,
           { setSubmitting }: FormikHelpers<IFormValues>
@@ -49,8 +47,8 @@ const LoginForm: React.FC = () => {
           </Form>
         )}
       </Formik>
-    </ModalWrapper>
+    </div>
   );
 };
 
-export default LoginForm;
+export default LoginPage;

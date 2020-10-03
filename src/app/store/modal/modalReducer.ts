@@ -13,8 +13,8 @@ export default function modalReducer(
   switch (type) {
     case modalActionName.OPEN_MODAL:
       if (payload) {
-        const { modalType, modalProps } = payload;
-        res = { modalType, modalProps };
+        const { modalType } = payload;
+        res = { modalType };
       } else {
         res = null;
       }

@@ -5,7 +5,7 @@ import { Formik, Form } from 'formik';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import {
-  ERROR_PAGE,
+  ERROR_PAGE_ROUTE,
   EVENTS_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
 } from '../../../app/common/constants/routes';
@@ -99,7 +99,7 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
   return isLoading ? (
     <LoadingComponent content='Loading event ...' />
   ) : error ? (
-    <Redirect to={ERROR_PAGE} />
+    <Redirect to={ERROR_PAGE_ROUTE} />
   ) : (
     <Segment clearing>
       <Header content={event ? 'Edit event' : 'Create new event'} />

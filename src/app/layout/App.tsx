@@ -7,10 +7,11 @@ import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 import {
   CREATE_EVENT_PAGE_ROUTE,
-  ERROR_PAGE,
+  ERROR_PAGE_ROUTE,
   EVENTS_PAGE_ROUTE,
   EVENT_DETAIL_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
+  LOGIN_PAGE_ROUTE,
   MANAGE_EVENT_PAGE_ROUTE,
 } from '../common/constants/routes';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
@@ -19,6 +20,7 @@ import Page404 from '../Page404/Page404';
 import './styles.scss';
 import ModalManager from '../common/modals/ModalManager';
 import ErrorComponent from '../common/errors/ErrorComponent';
+import LoginPage from '../../features/auth/LoginPage';
 
 function App() {
   const { key } = useLocation();
@@ -52,7 +54,8 @@ function App() {
                     `${MANAGE_EVENT_PAGE_ROUTE}/:id`,
                   ]}
                 />
-                <Route path={ERROR_PAGE} component={ErrorComponent}/>
+                <Route path={LOGIN_PAGE_ROUTE} component={LoginPage}/>
+                <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent}/>
               </Container>
             </>
           )}

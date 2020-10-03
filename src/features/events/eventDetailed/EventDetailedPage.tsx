@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import { listenToEventFromFirestore } from '../../../app/api/firestoreService';
-import { ERROR_PAGE } from '../../../app/common/constants/routes';
+import { ERROR_PAGE_ROUTE } from '../../../app/common/constants/routes';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
@@ -42,7 +42,7 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({
   return isLoading || (!event && !error) ? (
     <LoadingComponent content='Loading event ...' />
   ) : error ? (
-    <Redirect to={ERROR_PAGE} />
+    <Redirect to={ERROR_PAGE_ROUTE} />
   ) : (
     <Grid>
       <Grid.Column width={10}>

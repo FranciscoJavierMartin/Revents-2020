@@ -11,9 +11,9 @@ const ModalManager:React.FC = () => {
   let renderedModal = null;
 
   if(currentModal){
-    const {modalType, modalProps} = currentModal;
+    const {modalType} = currentModal;
     const ModalComponent = modalLookup[modalType];
-    // renderedModal = <ModalComponent {...modalProps}/>
+    // renderedModal = <ModalComponent />
     renderedModal = <h1>Hello world</h1>
   }
 

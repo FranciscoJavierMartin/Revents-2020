@@ -11,7 +11,9 @@ export interface IEventsState {
   events: IEvent[];
 }
 
-export interface IModalState {}
+export interface IModalState {
+  modalType: string;
+}
 
 export interface IAuthState {
   authenticated: boolean;
