@@ -1,8 +1,14 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from 'semantic-ui-react';
+import { socialLogin } from '../../app/api/firestore/firebaseService';
+import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 
 const SocialLogin: React.FC = () => {
+  const history = useHistory();
+
   return (
     <>
       <Button
@@ -19,7 +25,10 @@ const SocialLogin: React.FC = () => {
         color='google plus'
         style={{ marginBottom: 10 }}
         content='Login with Google'
-        onClick={() => toast.error('Login with Google disabled by now')}
+        onClick={() => {
+          socialLogin('google');
+          history.push(EVENTS_PAGE_ROUTE);
+        }}
       />
     </>
   );

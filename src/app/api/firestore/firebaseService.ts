@@ -23,21 +23,24 @@ export async function registerUserInFirebase(user: any) {
   }
 }
 
-export async function socialLogin(selectedProvider: string){
-  let provider: firebase.auth.FacebookAuthProvider | firebase.auth.GoogleAuthProvider;
+export async function socialLogin(selectedProvider: 'facebook' | 'google') {
+  let provider:
+    | firebase.auth.FacebookAuthProvider
+    | firebase.auth.GoogleAuthProvider;
 
-  if(selectedProvider === 'facebook'){
-    provider = new firebase.auth.FacebookAuthProvider();
-  } else if(selectedProvider === 'google'){
-    provider = new firebase.auth.GoogleAuthProvider();
+  switch (selectedProvider) {
+    case 'facebook':
+      provider = new firebase.auth.FacebookAuthProvider();
+      break;
+    case 'google':
+      provider = new firebase.auth.GoogleAuthProvider();
+      break;
   }
 
   try {
-    const result = await firebase.auth().signInWithPopup(provider!!);
-    if(result.additionalUserInfo?.isNewUser){
+    const result = await firebase.auth().signInWithPopup(provider);
+    if (result.additionalUserInfo?.isNewUser) {
       await setUserProfileData(result.user);
     }
-  } catch(error){
-
-  }
+  } catch (error) {}
 }
