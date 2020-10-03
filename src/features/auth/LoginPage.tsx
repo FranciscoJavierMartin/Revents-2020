@@ -1,11 +1,12 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, FormikHelpers } from 'formik';
-import { Button, Label } from 'semantic-ui-react';
+import { Button, Divider, Label } from 'semantic-ui-react';
 import InputText from '../../app/common/form/InputText';
 import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
 import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
+import SocialLogin from './SocialLogin';
 
 interface IFormValues {
   email: string;
@@ -52,6 +53,8 @@ const LoginPage = () => {
               color='teal'
               content='Login'
             />
+            <Divider horizontal>Or</Divider>
+            <SocialLogin/>
           </Form>
         )}
       </Formik>

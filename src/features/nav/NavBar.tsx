@@ -26,9 +26,9 @@ const NavBar: React.FC<INavBarProps> = () => {
           Re-vents
         </Menu.Item>
         <Menu.Item name='Events' as={NavLink} to={EVENTS_PAGE_ROUTE} />
-        <Menu.Item as={NavLink} to={CREATE_EVENT_PAGE_ROUTE}>
+        {authenticated && <Menu.Item as={NavLink} to={CREATE_EVENT_PAGE_ROUTE}>
           <Button positive inverted content='Create Event' />
-        </Menu.Item>
+        </Menu.Item>}
         {authenticated ? <SignInMenu/>:<SignOutMenu />}
       </Container>
     </Menu>

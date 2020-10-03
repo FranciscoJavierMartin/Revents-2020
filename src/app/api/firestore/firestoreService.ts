@@ -1,5 +1,5 @@
 import cuid from 'cuid';
-import { EVENTS_COLLECTION_NAME } from '../../common/constants/firebase';
+import { EVENTS_COLLECTION_NAME, USERS_COLLECTION_NAME } from '../../common/constants/firebase';
 import { IEvent } from '../../common/interfaces/models';
 import firebase from '../firebase';
 
@@ -62,4 +62,13 @@ export function cancelEventToggle(event: IEvent){
   return db.collection(EVENTS_COLLECTION_NAME).doc(event.id).update({
     isCancelled: !event.isCancelled,
   });
+}
+
+export function setUserProfileData(user: any){
+  return db.collection(USERS_COLLECTION_NAME).doc(user.uid).set({
+    displayName: user.displayName,
+    email: user.email,
+    photoURL: user.photoURL || null,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  })
 }

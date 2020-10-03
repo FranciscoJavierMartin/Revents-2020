@@ -1,11 +1,12 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Label } from 'semantic-ui-react';
+import { Button, Divider, Label } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import { registerUserInFirebase } from '../../app/api/firestore/firebaseService';
 import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 import InputText from '../../app/common/form/InputText';
+import SocialLogin from './SocialLogin';
 
 interface IFormValues {
   displayName: string;
@@ -36,7 +37,7 @@ const RegisterPage: React.FC = () => {
             setSubmitting(false);
             history.push(EVENTS_PAGE_ROUTE);
           } catch (error) {
-            setErrors({auth: error.message})
+            setErrors({ auth: error.message });
             setSubmitting(false);
           }
         }}
@@ -46,7 +47,14 @@ const RegisterPage: React.FC = () => {
             <InputText name='displayName' placeholder='Name' />
             <InputText name='email' placeholder='Email address' type='email' />
             <InputText name='password' placeholder='Password' type='password' />
-            {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth}/>}
+            {errors.auth && (
+              <Label
+                basic
+                color='red'
+                style={{ marginBottom: 10 }}
+                content={errors.auth}
+              />
+            )}
             <Button
               loading={isSubmitting}
               disabled={!isValid || !dirty || isSubmitting}
@@ -56,6 +64,8 @@ const RegisterPage: React.FC = () => {
               color='teal'
               content='Register'
             />
+            <Divider horizontal>Or</Divider>
+            <SocialLogin />
           </Form>
         )}
       </Formik>
