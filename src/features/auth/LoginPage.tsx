@@ -5,6 +5,7 @@ import InputText from '../../app/common/form/InputText';
 import * as Yup from 'yup';
 import { signInUser } from '../../app/store/auth/authActions';
 import { useDispatch } from 'react-redux';
+import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
 
 interface IFormValues {
   email: string;
@@ -16,19 +17,23 @@ const LoginPage = () => {
   const validationSchema = Yup.object({
     email: Yup.string().required().email(),
     password: Yup.string().required(),
-  })
+  });
   return (
     <div>
       <Formik
         initialValues={{ email: '', password: '' }}
         validationSchema={validationSchema}
-        onSubmit={(
+        onSubmit={async (
           values: IFormValues,
           { setSubmitting }: FormikHelpers<IFormValues>
         ) => {
-          dispatch(signInUser(values.email, values.password));
-          /*setSubmitting(false);
-          dispatch(closeModal());*/
+          try {
+            await signInWithEmailAndPassword(values.email, values.password);
+            setSubmitting(false);
+          } catch (error) {
+            console.log(error);
+          }
+          // dispatch(closeModal());
         }}
       >
         {({ isSubmitting, isValid, dirty }) => (

@@ -25,7 +25,7 @@ import {
   cancelEventToggle,
   listenToEventFromFirestore,
   updateEventInFirestore,
-} from '../../../app/api/firestoreService';
+} from '../../../app/api/firestore/firestoreService';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
 

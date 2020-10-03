@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/common/constants/routes';
 import { IAttendant, IEvent } from '../../../app/common/interfaces/models';
 import EventListAttendee from './EventListAttendee';
-import { deleteEventInFirestore } from '../../../app/api/firestoreService';
+import { deleteEventInFirestore } from '../../../app/api/firestore/firestoreService';
 
 interface EventListItemProps {
   event: IEvent;

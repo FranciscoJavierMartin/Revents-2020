@@ -18,7 +18,6 @@ import EventDetailedPage from '../../features/events/eventDetailed/EventDetailed
 import EventForm from '../../features/events/eventForm/EventForm';
 import Page404 from '../Page404/Page404';
 import './styles.scss';
-import ModalManager from '../common/modals/ModalManager';
 import ErrorComponent from '../common/errors/ErrorComponent';
 import LoginPage from '../../features/auth/LoginPage';
 
@@ -27,7 +26,6 @@ function App() {
 
   return (
     <React.Fragment>
-      <ModalManager />
       <ToastContainer position='bottom-right' hideProgressBar/>
       <Switch>
         <Route exact component={HomePage} path={HOME_PAGE_ROUTE} />

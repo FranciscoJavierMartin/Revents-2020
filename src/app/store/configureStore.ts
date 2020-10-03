@@ -1,6 +1,8 @@
+import { verify } from 'crypto';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
+import { verifyAuth } from './auth/authActions';
 import rootReducer from './rootReducer';
 
 const enhancers =
@@ -9,5 +11,7 @@ const enhancers =
     : applyMiddleware(thunk);
 
 export function configureStore() {
-  return createStore(rootReducer, enhancers);
+  const store = createStore(rootReducer, enhancers);
+  store.dispatch(verifyAuth());
+  return store;
 }

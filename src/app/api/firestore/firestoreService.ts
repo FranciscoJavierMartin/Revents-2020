@@ -1,7 +1,7 @@
 import cuid from 'cuid';
-import { EVENTS_COLLECTION_NAME } from '../common/constants/firebase';
-import { IEvent } from '../common/interfaces/models';
-import firebase from './firebase';
+import { EVENTS_COLLECTION_NAME } from '../../common/constants/firebase';
+import { IEvent } from '../../common/interfaces/models';
+import firebase from '../firebase';
 
 const db = firebase.firestore();
 

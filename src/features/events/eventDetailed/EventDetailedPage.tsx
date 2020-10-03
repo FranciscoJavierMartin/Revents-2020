@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
-import { listenToEventFromFirestore } from '../../../app/api/firestoreService';
+import { listenToEventFromFirestore } from '../../../app/api/firestore/firestoreService';
 import { ERROR_PAGE_ROUTE } from '../../../app/common/constants/routes';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';

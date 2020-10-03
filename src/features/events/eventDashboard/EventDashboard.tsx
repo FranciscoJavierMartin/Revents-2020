@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../app/common/interfaces/states';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import EventFilters from './EventFilters';
-import { listenToEventsFromFirestore } from '../../../app/api/firestoreService';
+import { listenToEventsFromFirestore } from '../../../app/api/firestore/firestoreService';
 import { listenToEvents } from '../../../app/store/events/eventActions';
 import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
 
