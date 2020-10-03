@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, FormikHelpers } from 'formik';
-import { Button } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 import InputText from '../../app/common/form/InputText';
 import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
@@ -10,6 +10,7 @@ import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 interface IFormValues {
   email: string;
   password: string;
+  auth?: string;
 }
 
 const LoginPage = () => {
@@ -25,21 +26,23 @@ const LoginPage = () => {
         validationSchema={validationSchema}
         onSubmit={async (
           values: IFormValues,
-          { setSubmitting }: FormikHelpers<IFormValues>
+          { setSubmitting, setErrors }: FormikHelpers<IFormValues>
         ) => {
           try {
             await signInWithEmailAndPassword(values.email, values.password);
             setSubmitting(false);
             history.push(EVENTS_PAGE_ROUTE);
           } catch (error) {
-            console.log(error);
+            setErrors({auth: error.message})
+            setSubmitting(false);
           }
         }}
       >
-        {({ isSubmitting, isValid, dirty }) => (
+        {({ isSubmitting, isValid, dirty, errors }) => (
           <Form className='ui form'>
             <InputText name='email' placeholder='Email address' />
             <InputText name='password' placeholder='Password' type='password' />
+            {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth}/>}
             <Button
               loading={isSubmitting}
               disabled={!isValid || !dirty || isSubmitting}
