@@ -6,6 +6,7 @@ import { Route, Switch, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 import {
+  ACCOUNT_PAGE_ROUTE,
   CREATE_EVENT_PAGE_ROUTE,
   ERROR_PAGE_ROUTE,
   EVENTS_PAGE_ROUTE,
@@ -22,6 +23,7 @@ import './styles.scss';
 import ErrorComponent from '../common/errors/ErrorComponent';
 import LoginPage from '../../features/auth/LoginPage';
 import RegisterPage from '../../features/auth/RegisterPage';
+import AccountPage from '../../features/auth/AccountPage';
 
 function App() {
   const { key } = useLocation();
@@ -56,6 +58,7 @@ function App() {
                 />
                 <Route path={LOGIN_PAGE_ROUTE} component={LoginPage}/>
                 <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage}/>
+                <Route path={ACCOUNT_PAGE_ROUTE} component={AccountPage}/>
                 <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent}/>
               </Container>
             </>

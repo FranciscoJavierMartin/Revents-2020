@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Menu, Dropdown, Image } from 'semantic-ui-react';
 import { signOutFirebase } from '../../app/api/firestore/firebaseService';
 import {
+  ACCOUNT_PAGE_ROUTE,
   CREATE_EVENT_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
 } from '../../app/common/constants/routes';
@@ -43,6 +44,12 @@ const SignInMenu: React.FC<ISignInMenuProps> = () => {
             icon='plus'
           />
           <Dropdown.Item text='My profile' icon='user' />
+          <Dropdown.Item
+            text='My account'
+            icon='settings'
+            as={Link}
+            to={ACCOUNT_PAGE_ROUTE}
+          />
           <Dropdown.Item text='Sign out' icon='power' onClick={handleSignOut} />
         </Dropdown.Menu>
       </Dropdown>
