@@ -44,3 +44,8 @@ export async function socialLogin(selectedProvider: 'facebook' | 'google') {
     }
   } catch (error) {}
 }
+
+export function updateUserPassword(newPassword: string){
+  const user = firebase.auth().currentUser;
+  return user?.updatePassword(newPassword);
+}

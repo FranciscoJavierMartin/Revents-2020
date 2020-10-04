@@ -6,7 +6,7 @@ const initialState: IAuthState = {
   authenticated: false,
   currentUser: {
     email: '',
-    photoURL: null
+    photoURL: null,
   },
 };
 
@@ -23,9 +23,12 @@ export default function authReducer(
         authenticated: true,
         currentUser: {
           email: payload?.email,
+          displayName: payload.displayName,
           photoURL: payload.photoURL || '/assets/user.png',
           uid: payload.uid,
-          providerId: payload.prodiverData && payload.prodiverData[0].providerId
+          providerId:
+            (payload.prodiverData && payload.prodiverData[0].providerId) ||
+            'password',
         },
       };
       break;

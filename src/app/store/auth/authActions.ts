@@ -1,13 +1,15 @@
 import firebase from '../../api/firebase';
-
-import { authActionName } from '../../common/constants/actionsNames';
+import {
+  asyncActionName,
+  authActionName,
+} from '../../common/constants/actionsNames';
 import { IAuthAction } from '../../common/interfaces/actions';
 
 export function signInUser(user: any) {
   return {
     type: authActionName.SIGN_IN_USER,
-    payload: user
-  }
+    payload: user,
+  };
 }
 
 export function verifyAuth() {
@@ -18,6 +20,7 @@ export function verifyAuth() {
       } else {
         dispatch(signOutUser());
       }
+      dispatch({ type: asyncActionName.APP_LOADED });
     });
   };
 }

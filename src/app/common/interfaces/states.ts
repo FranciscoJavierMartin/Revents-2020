@@ -18,4 +18,5 @@ export interface IAuthState {
 export interface IAsyncState {
   isLoading: boolean;
   error: any;
+  initialized: boolean;
 }

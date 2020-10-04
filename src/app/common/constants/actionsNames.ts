@@ -14,4 +14,5 @@ export enum asyncActionName {
   START = 'START',
   FINISH = 'FINISH',
   ERROR = 'ERROR',
+  APP_LOADED = 'APP_LOADED',
 }

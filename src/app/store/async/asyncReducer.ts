@@ -4,12 +4,13 @@ import { asyncActionName } from './../../common/constants/actionsNames';
 const initialState: IAsyncState = {
   isLoading: false,
   error: null,
+  initialized: false,
 };
 
 export default function asyncReducer(
   state = initialState,
   { type, payload }: any
-) : IAsyncState {
+): IAsyncState {
   let res: IAsyncState;
 
   switch (type) {
@@ -31,6 +32,12 @@ export default function asyncReducer(
         ...state,
         isLoading: false,
         error: payload,
+      };
+      break;
+    case asyncActionName.APP_LOADED:
+      res = {
+        ...state,
+        initialized: true,
       };
       break;
     default:

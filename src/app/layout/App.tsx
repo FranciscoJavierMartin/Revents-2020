@@ -24,13 +24,21 @@ import ErrorComponent from '../common/errors/ErrorComponent';
 import LoginPage from '../../features/auth/LoginPage';
 import RegisterPage from '../../features/auth/RegisterPage';
 import AccountPage from '../../features/auth/AccountPage';
+import { useSelector } from 'react-redux';
+import { IAsyncState, IRootState } from '../common/interfaces/states';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const { key } = useLocation();
+  const { initialized } = useSelector<IRootState, IAsyncState>(
+    (state) => state.async
+  );
 
-  return (
+  return !initialized ? (
+    <LoadingComponent content='Loading app...' />
+  ) : (
     <React.Fragment>
-      <ToastContainer position='bottom-right' hideProgressBar/>
+      <ToastContainer position='bottom-right' hideProgressBar />
       <Switch>
         <Route exact component={HomePage} path={HOME_PAGE_ROUTE} />
         <Route
@@ -56,10 +64,10 @@ function App() {
                     `${MANAGE_EVENT_PAGE_ROUTE}/:id`,
                   ]}
                 />
-                <Route path={LOGIN_PAGE_ROUTE} component={LoginPage}/>
-                <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage}/>
-                <Route path={ACCOUNT_PAGE_ROUTE} component={AccountPage}/>
-                <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent}/>
+                <Route path={LOGIN_PAGE_ROUTE} component={LoginPage} />
+                <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage} />
+                <Route path={ACCOUNT_PAGE_ROUTE} component={AccountPage} />
+                <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent} />
               </Container>
             </>
           )}
