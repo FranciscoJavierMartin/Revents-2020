@@ -3,7 +3,6 @@ import { IEventAction } from '../../common/interfaces/actions';
 import { IEvent } from '../../common/interfaces/models';
 
 export function listenToEvents(events: any[]){
-  console.log(events);
   return {
     type: eventActionsName.FETCH_EVENTS,
     payload: events,

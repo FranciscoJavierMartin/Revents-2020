@@ -7,7 +7,6 @@ interface IEventListProps {
 }
 
 const EventList: React.FC<IEventListProps> = ({ events = [] }) => {
-  console.log(events);
   return (
     <>
       {events.map((event: IEvent) => (

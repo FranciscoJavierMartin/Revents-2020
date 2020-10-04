@@ -25,7 +25,6 @@ interface IEventDetailedHeaderProps {
 const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
   event,
 }) => {
-  console.log('Detail', event.id);
   return (
     <Segment.Group>
       <Segment basic attached='top' style={{ padding: '0' }}>
