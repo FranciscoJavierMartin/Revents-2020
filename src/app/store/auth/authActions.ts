@@ -1,9 +1,14 @@
 import firebase from '../../api/firebase';
 import {
+  dataFromSnapshot,
+  getUserProfile,
+} from '../../api/firestore/firestoreService';
+import {
   asyncActionName,
   authActionName,
 } from '../../common/constants/actionsNames';
 import { IAuthAction } from '../../common/interfaces/actions';
+import { listenToCurrentUserProfile } from '../profile/profileActions';
 
 export function signInUser(user: any) {
   return {
@@ -17,10 +22,15 @@ export function verifyAuth() {
     return firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         dispatch(signInUser(user));
+        const profileRef = getUserProfile(user.uid);
+        profileRef.onSnapshot((snapshot) => {
+          dispatch(listenToCurrentUserProfile(dataFromSnapshot(snapshot)));
+          dispatch({ type: asyncActionName.APP_LOADED });
+        });
       } else {
         dispatch(signOutUser());
+        dispatch({ type: asyncActionName.APP_LOADED });
       }
-      dispatch({ type: asyncActionName.APP_LOADED });
     });
   };
 }

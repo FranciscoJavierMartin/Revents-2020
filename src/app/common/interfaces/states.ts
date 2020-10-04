@@ -4,6 +4,7 @@ export interface IRootState {
   event: IEventsState;
   auth: IAuthState;
   async: IAsyncState;
+  profile: IProfileState;
 }
 
 export interface IEventsState {
@@ -19,4 +20,9 @@ export interface IAsyncState {
   isLoading: boolean;
   error: any;
   initialized: boolean;
+}
+
+export interface IProfileState {
+  currentUserProfile: any;
+  selectedProfile: any;
 }

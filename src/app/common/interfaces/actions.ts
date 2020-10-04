@@ -1,4 +1,4 @@
-import { asyncActionName } from './../constants/actionsNames';
+import { asyncActionName, profileActionName } from './../constants/actionsNames';
 import { authActionName, eventActionsName } from '../constants/actionsNames';
 import { IEvent } from './models';
 
@@ -14,5 +14,10 @@ export interface IAuthAction {
 
 export interface IAsyncAction {
   type: asyncActionName;
+  payload?: any;
+}
+
+export interface IProfileAction {
+  type: profileActionName;
   payload?: any;
 }

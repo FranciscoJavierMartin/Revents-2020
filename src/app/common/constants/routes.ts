@@ -6,5 +6,6 @@ export const MANAGE_EVENT_PAGE_ROUTE = '/manage';
 export const LOGIN_PAGE_ROUTE = '/login';
 export const REGISTER_PAGE_ROUTE = '/register';
 export const ACCOUNT_PAGE_ROUTE = '/account';
+export const PROFILE_PAGE_ROUTE = '/profile';
 export const NOT_FOUND_PAGE = '/not-found'
 export const ERROR_PAGE_ROUTE = '/error';

@@ -14,6 +14,7 @@ import {
   HOME_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
   MANAGE_EVENT_PAGE_ROUTE,
+  PROFILE_PAGE_ROUTE,
   REGISTER_PAGE_ROUTE,
 } from '../common/constants/routes';
 import EventDetailedPage from '../../features/events/eventDetailed/EventDetailedPage';
@@ -27,6 +28,7 @@ import AccountPage from '../../features/auth/AccountPage';
 import { useSelector } from 'react-redux';
 import { IAsyncState, IRootState } from '../common/interfaces/states';
 import LoadingComponent from './LoadingComponent';
+import ProfilePage from '../../features/profiles/profilePage/ProfilePage';
 
 function App() {
   const { key } = useLocation();
@@ -67,6 +69,7 @@ function App() {
                 <Route path={LOGIN_PAGE_ROUTE} component={LoginPage} />
                 <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage} />
                 <Route path={ACCOUNT_PAGE_ROUTE} component={AccountPage} />
+                <Route path={`${PROFILE_PAGE_ROUTE}/:id`} component={ProfilePage} />
                 <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent} />
               </Container>
             </>
