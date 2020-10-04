@@ -3,10 +3,10 @@ import { IAuthAction } from '../../common/interfaces/actions';
 import { IAuthState } from '../../common/interfaces/states';
 
 const initialState: IAuthState = {
-  authenticated: true,
+  authenticated: false,
   currentUser: {
-    email: 'test@test.com',
-    photoURL: '/assets/user.png'
+    email: '',
+    photoURL: null
   },
 };
 
@@ -23,7 +23,9 @@ export default function authReducer(
         authenticated: true,
         currentUser: {
           email: payload?.email,
-          photoURL: '/assets/user.png',
+          photoURL: payload.photoURL || '/assets/user.png',
+          uid: payload.uid,
+          providerId: payload.prodiverData && payload.prodiverData[0].providerId
         },
       };
       break;
