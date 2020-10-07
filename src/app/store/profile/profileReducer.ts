@@ -5,6 +5,7 @@ import { IProfileState } from '../../common/interfaces/states';
 const initialState: IProfileState = {
   currentUserProfile: null,
   selectedProfile: null,
+  photos: [],
 };
 
 export default function profileReducer(
@@ -25,6 +26,12 @@ export default function profileReducer(
         ...state,
         selectedProfile: payload,
       };
+      break;
+    case profileActionName.LISTEN_TO_USER_PHOTOS:
+      res = {
+        ...state,
+        photos: payload,
+      }
       break;
     default:
       res = state;

@@ -46,7 +46,7 @@ const SignInMenu: React.FC<ISignInMenuProps> = () => {
           />
           <Dropdown.Item
             as={Link}
-            to={`${PROFILE_PAGE_ROUTE}/${currentUserProfile.uid}`}
+            to={`${PROFILE_PAGE_ROUTE}/${currentUserProfile.id}`}
             text='My profile'
             icon='user'
           />

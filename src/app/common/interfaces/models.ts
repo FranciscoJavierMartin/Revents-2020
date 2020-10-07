@@ -32,3 +32,9 @@ export interface ILatLng {
   lat: number;
   lng: number;
 }
+
+export interface IPhoto {
+  name: string;
+  url: string;
+  id: string;
+}

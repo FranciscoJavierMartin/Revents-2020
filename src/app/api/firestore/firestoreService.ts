@@ -1,9 +1,10 @@
 import cuid from 'cuid';
 import {
   EVENTS_COLLECTION_NAME,
+  PHOTOS_COLLECTION_NAME,
   USERS_COLLECTION_NAME,
 } from '../../common/constants/firebase';
-import { IEvent } from '../../common/interfaces/models';
+import { IEvent, IPhoto } from '../../common/interfaces/models';
 import firebase from '../firebase';
 
 const db = firebase.firestore();
@@ -98,4 +99,63 @@ export async function updateUserProfile(profile: any) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function updateUserProfilePhoto(
+  downloadURL: string,
+  filename: string
+) {
+  const user = firebase.auth().currentUser;
+  const userDocRef = db.collection(USERS_COLLECTION_NAME).doc(user?.uid);
+  try {
+    const userDoc = await userDocRef.get();
+    if (!userDoc.data()?.photoURL) {
+      await db.collection(USERS_COLLECTION_NAME).doc(user?.uid).update({
+        photoURL: downloadURL,
+      });
+      await user?.updateProfile({
+        photoURL: downloadURL,
+      });
+    }
+    return await db
+      .collection(USERS_COLLECTION_NAME)
+      .doc(user?.uid)
+      .collection(PHOTOS_COLLECTION_NAME)
+      .add({
+        name: filename,
+        url: downloadURL,
+      });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function getUserPhotos(userUid: string) {
+  return db
+    .collection(USERS_COLLECTION_NAME)
+    .doc(userUid)
+    .collection(PHOTOS_COLLECTION_NAME);
+}
+
+export async function setMainPhoto(photo: IPhoto) {
+  const user = firebase.auth().currentUser;
+  try {
+    await db
+      .collection(USERS_COLLECTION_NAME)
+      .doc(user?.uid)
+      .update({ photoURL: photo.url });
+    return await user?.updateProfile({
+      photoURL: photo.url,
+    });
+  } catch (error) {}
+}
+
+export function deletePhotoFromCollection(photoId: string) {
+  const userUid = firebase.auth().currentUser?.uid;
+  return db
+    .collection(USERS_COLLECTION_NAME)
+    .doc(userUid)
+    .collection(PHOTOS_COLLECTION_NAME)
+    .doc(photoId)
+    .delete();
 }

@@ -45,7 +45,20 @@ export async function socialLogin(selectedProvider: 'facebook' | 'google') {
   } catch (error) {}
 }
 
-export function updateUserPassword(newPassword: string){
+export function updateUserPassword(newPassword: string) {
   const user = firebase.auth().currentUser;
   return user?.updatePassword(newPassword);
+}
+
+export function uploadToFirebaseStorage(file: File, filename: string) {
+  const user = firebase.auth().currentUser;
+  const storage = firebase.storage().ref();
+  return storage.child(`${user?.uid}/user_images/${filename}`).put(file);
+}
+
+export function deleteFromFirebaseStorage(filename: string) {
+  const userUid = firebase.auth().currentUser?.uid;
+  const storageRef = firebase.storage().ref();
+  const photoRef = storageRef.child(`${userUid}/user_images/${filename}`);
+  return photoRef.delete();
 }

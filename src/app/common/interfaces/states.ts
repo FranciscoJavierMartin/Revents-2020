@@ -1,4 +1,4 @@
-import { IEvent } from './models';
+import { IEvent, IPhoto } from './models';
 
 export interface IRootState {
   event: IEventsState;
@@ -25,4 +25,5 @@ export interface IAsyncState {
 export interface IProfileState {
   currentUserProfile: any;
   selectedProfile: any;
+  photos: IPhoto[];
 }
