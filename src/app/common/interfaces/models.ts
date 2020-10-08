@@ -12,6 +12,8 @@ export interface IEvent {
   hostPhotoURL: string;
   attendees: IAttendant[];
   isCancelled?: boolean;
+  attendeeIds: string[];
+  hostedUid: string;
 }
 
 export interface IAttendant {

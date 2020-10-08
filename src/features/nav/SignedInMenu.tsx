@@ -34,9 +34,9 @@ const SignInMenu: React.FC<ISignInMenuProps> = () => {
       <Image
         avatar
         spaced='right'
-        src={currentUserProfile.photoURL || '/assets/user.png'}
+        src={currentUserProfile?.photoURL || '/assets/user.png'}
       />
-      <Dropdown pointing='top left' text={currentUserProfile.displayName}>
+      <Dropdown pointing='top left' text={currentUserProfile?.displayName}>
         <Dropdown.Menu>
           <Dropdown.Item
             as={Link}
@@ -46,7 +46,7 @@ const SignInMenu: React.FC<ISignInMenuProps> = () => {
           />
           <Dropdown.Item
             as={Link}
-            to={`${PROFILE_PAGE_ROUTE}/${currentUserProfile.id}`}
+            to={`${PROFILE_PAGE_ROUTE}/${currentUserProfile?.id}`}
             text='My profile'
             icon='user'
           />

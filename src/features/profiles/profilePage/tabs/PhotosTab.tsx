@@ -19,7 +19,6 @@ interface IAboutTabProps {
   isCurrentUser: boolean;
 }
 
-//FIXME: Fix error on show date
 const PhotosTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
   const dispatch = useDispatch();
   const [uploadPhotoMode, setUploadPhotoMode] = useState<boolean>(false);
@@ -74,7 +73,9 @@ const PhotosTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
           <Header floated='left' icon='user' content='Photos' />
           {isCurrentUser && (
             <Button
-              onClick={(previousState) => setUploadPhotoMode(!previousState)}
+              onClick={() =>
+                setUploadPhotoMode((previousState) => !previousState)
+              }
               floated='right'
               basic
               positive

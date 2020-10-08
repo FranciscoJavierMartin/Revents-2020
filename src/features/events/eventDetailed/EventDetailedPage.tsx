@@ -21,16 +21,21 @@ interface IEventDetailedPageParams {
 interface IEventDetailedPageProps
   extends RouteComponentProps<IEventDetailedPageParams> {}
 
-const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({
-  match,
-}) => {
+const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({ match }) => {
   const dispatch = useDispatch();
+  const currentUser = useSelector<IRootState, any>(
+    (state) => state.auth.currentUser
+  );
   const event = useSelector<IRootState, IEvent | undefined>((state) =>
     state.event.events?.find((evt) => evt.id === match.params.id)
   );
 
   const { error, isLoading } = useSelector<IRootState, IAsyncState>(
     (state) => state.async
+  );
+  const isHost: boolean = !!(event?.hostedUid === currentUser?.uid);
+  const isGoing: boolean = !!event?.attendeeIds.some(
+    (a) => a === currentUser?.uid
   );
 
   useFirestoreDoc({
@@ -46,12 +51,16 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({
   ) : (
     <Grid>
       <Grid.Column width={10}>
-        <EventDetailedHeader event={event!!} />
+        <EventDetailedHeader
+          event={event!!}
+          isHost={isHost}
+          isGoing={isGoing}
+        />
         <EventDetailedInfo event={event!!} />
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendess={event?.attendees!!} />
+        <EventDetailedSidebar attendess={event?.attendees!!} hostUid={event?.hostedUid || ''}/>
       </Grid.Column>
     </Grid>
   );

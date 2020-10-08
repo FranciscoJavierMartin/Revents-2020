@@ -1,10 +1,9 @@
-import cuid from 'cuid';
 import {
   EVENTS_COLLECTION_NAME,
   PHOTOS_COLLECTION_NAME,
   USERS_COLLECTION_NAME,
 } from '../../common/constants/firebase';
-import { IEvent, IPhoto } from '../../common/interfaces/models';
+import { IAttendant, IEvent, IPhoto } from '../../common/interfaces/models';
 import firebase from '../firebase';
 
 const db = firebase.firestore();
@@ -42,15 +41,19 @@ export function listenToEventFromFirestore(eventId: string | undefined) {
 }
 
 export function addEventToFirestore(event: IEvent) {
+  const user = firebase.auth().currentUser;
+
   return db.collection(EVENTS_COLLECTION_NAME).add({
     ...event,
-    hostedBy: 'Diana',
-    hostPhotoURL: 'https://randomuser.me/api/portraits/women/20.jpg',
+    hostedUid: user?.uid,
+    hostedBy: user?.displayName,
+    hostPhotoURL: user?.photoURL || null,
     attendees: firebase.firestore.FieldValue.arrayUnion({
-      id: cuid(),
-      displayName: 'Diana',
-      photoURL: 'https://randomuser.me/api/portraits/women/20.jpg',
+      id: user?.uid,
+      displayName: user?.displayName,
+      photoURL: user?.photoURL || null,
     }),
+    attendeeIds: firebase.firestore.FieldValue.arrayUnion(user?.uid),
   });
 }
 
@@ -158,4 +161,43 @@ export function deletePhotoFromCollection(photoId: string) {
     .collection(PHOTOS_COLLECTION_NAME)
     .doc(photoId)
     .delete();
+}
+
+export function addUserAttendance(event: IEvent) {
+  const user = firebase.auth().currentUser;
+
+  return db
+    .collection(EVENTS_COLLECTION_NAME)
+    .doc(event.id)
+    .update({
+      attendees: firebase.firestore.FieldValue.arrayUnion({
+        id: user?.uid,
+        displayName: user?.displayName,
+        photoURL: user?.photoURL || null,
+      }),
+      attendeeIds: firebase.firestore.FieldValue.arrayUnion(user?.uid),
+    });
+}
+
+export async function cancelUserAttendance(event: IEvent) {
+  const user = firebase.auth().currentUser;
+
+  try {
+    const eventDoc = await db
+      .collection(EVENTS_COLLECTION_NAME)
+      .doc(event.id)
+      .get();
+
+    return db
+      .collection(EVENTS_COLLECTION_NAME)
+      .doc(event.id)
+      .update({
+        attendeeIds: firebase.firestore.FieldValue.arrayRemove(user?.uid),
+        attendees: eventDoc
+          .data()
+          ?.attendees.filter((attendee: IAttendant) => attendee.id !== user?.uid),
+      });
+  } catch (error) {
+    throw error;
+  }
 }

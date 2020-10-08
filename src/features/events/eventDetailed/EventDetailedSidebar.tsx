@@ -1,13 +1,17 @@
 import React from 'react';
-import { Item, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Item, Label, Segment } from 'semantic-ui-react';
+import { PROFILE_PAGE_ROUTE } from '../../../app/common/constants/routes';
 import { IAttendant } from '../../../app/common/interfaces/models';
 
 interface IEventDetailSidebarProps {
   attendess: IAttendant[];
+  hostUid: string;
 }
 
 const EventDetailedSidebar: React.FC<IEventDetailSidebarProps> = ({
   attendess,
+  hostUid,
 }) => {
   return (
     <>
@@ -24,7 +28,15 @@ const EventDetailedSidebar: React.FC<IEventDetailSidebarProps> = ({
       <Segment attached>
         <Item.Group relaxed divided>
           {attendess.map((attendant) => (
-            <Item key={attendant.id} style={{ position: 'relative' }}>
+            <Item key={attendant.id} style={{ position: 'relative' }} as={Link} to={`${PROFILE_PAGE_ROUTE}/${attendant.id}`}>
+              {hostUid === attendant.id && (
+                <Label
+                  style={{ position: 'absolute' }}
+                  color='orange'
+                  ribbon='right'
+                  content='Host'
+                />
+              )}
               <Item.Image
                 size='tiny'
                 src={attendant.photoURL || '/assets/user.png'}

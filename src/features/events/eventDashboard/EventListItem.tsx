@@ -2,7 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Segment, Item, Icon, List, Button, Label } from 'semantic-ui-react';
 import { format } from 'date-fns';
-import { EVENT_DETAIL_PAGE_ROUTE } from '../../../app/common/constants/routes';
+import {
+  EVENT_DETAIL_PAGE_ROUTE,
+  PROFILE_PAGE_ROUTE,
+} from '../../../app/common/constants/routes';
 import { IAttendant, IEvent } from '../../../app/common/interfaces/models';
 import EventListAttendee from './EventListAttendee';
 import { deleteEventInFirestore } from '../../../app/api/firestore/firestoreService';
@@ -20,7 +23,12 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
             <Item.Image size='tiny' circular src={event.hostPhotoURL} />
             <Item.Content>
               <Item.Header content={event.title} />
-              <Item.Description>Hosted by {event.hostedBy}</Item.Description>
+              <Item.Description>
+                Hosted by{' '}
+                <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostedUid}`}>
+                  {event.hostedBy}
+                </Link>
+              </Item.Description>
               {event.isCancelled && (
                 <Label
                   style={{ top: '-40px' }}
