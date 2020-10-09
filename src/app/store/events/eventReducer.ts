@@ -6,6 +6,7 @@ import { eventActionsName } from '../../common/constants/actionsNames';
 
 const initialState: IEventsState = {
   events: [],
+  comments: [],
 };
 
 export default function eventReducer(
@@ -46,6 +47,18 @@ export default function eventReducer(
           events: [...state.events.filter((evt) => evt.id !== payload.id)],
         };
       }
+      break;
+    case eventActionsName.LISTEN_TO_EVENT_CHAT:
+      res = {
+        ...state,
+        comments: payload,
+      };
+      break;
+    case eventActionsName.CLEAR_COMMENTS:
+      res = {
+        ...state,
+        comments: [],
+      };
       break;
     default:
       res = state;

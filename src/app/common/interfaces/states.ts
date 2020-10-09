@@ -1,4 +1,4 @@
-import { IEvent, IPhoto } from './models';
+import { IEvent, IPhoto, IComment } from './models';
 
 export interface IRootState {
   event: IEventsState;
@@ -9,6 +9,7 @@ export interface IRootState {
 
 export interface IEventsState {
   events: IEvent[];
+  comments: IComment[];
 }
 
 export interface IAuthState {

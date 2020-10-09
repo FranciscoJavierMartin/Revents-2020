@@ -1,5 +1,12 @@
+import { CHAT_REALTIME } from '../../common/constants/firebase';
 import firebase from '../firebase';
 import { setUserProfileData } from './firestoreService';
+
+export function firebaseObjectToArray(snapshot: any[]): any[] {
+  return snapshot
+    ? Object.entries(snapshot).map((e) => Object.assign({}, e[1], { id: e[0] }))
+    : [];
+}
 
 export function signInWithEmailAndPassword(email: string, password: string) {
   return firebase.auth().signInWithEmailAndPassword(email, password);
@@ -61,4 +68,26 @@ export function deleteFromFirebaseStorage(filename: string) {
   const storageRef = firebase.storage().ref();
   const photoRef = storageRef.child(`${userUid}/user_images/${filename}`);
   return photoRef.delete();
+}
+
+export function addEventChatComment(eventId: string, comment: string, parentId?: string) {
+  const user = firebase.auth().currentUser;
+  const newComment = {
+    diplayName: user?.displayName,
+    photoURL: user?.photoURL,
+    uid: user?.uid,
+    text: comment,
+    date: Date.now(),
+    parentId: parentId || '',
+    childNodes: []
+  };
+
+  return firebase
+    .database()
+    .ref(`${CHAT_REALTIME}/${eventId}`)
+    .push(newComment);
+}
+
+export function getEventChatRef(eventId: string) {
+  return firebase.database().ref(`${CHAT_REALTIME}/${eventId}`).orderByKey();
 }

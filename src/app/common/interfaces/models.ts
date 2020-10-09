@@ -40,3 +40,14 @@ export interface IPhoto {
   url: string;
   id: string;
 }
+
+export interface IComment {
+  diplayName: string;
+  photoURL: string;
+  uid: string;
+  text: string;
+  date: Date;
+  id: string;
+  parentId?: string;
+  childNodes: IComment[];
+}
