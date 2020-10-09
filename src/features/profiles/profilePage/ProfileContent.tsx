@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tab } from 'semantic-ui-react';
 import AboutTab from './tabs/AboutTab';
+import EventsTab from './tabs/EventsTab';
 import PhotosTab from './tabs/PhotosTab';
 
 interface IProfileContentProps {
@@ -25,7 +26,7 @@ const ProfileContent: React.FC<IProfileContentProps> = ({
         <PhotosTab profile={profile} isCurrentUser={isCurrentUser} />
       ),
     },
-    { menuItem: 'Events', render: () => <Tab.Pane>Events</Tab.Pane> },
+    { menuItem: 'Events', render: () => <EventsTab profile={profile} isCurrentUser={isCurrentUser}/> },
     { menuItem: 'Followers', render: () => <Tab.Pane>Followers</Tab.Pane> },
     { menuItem: 'Following', render: () => <Tab.Pane>Following</Tab.Pane> },
   ];
@@ -35,6 +36,7 @@ const ProfileContent: React.FC<IProfileContentProps> = ({
       menu={{ fluid: true, vertical: true }}
       menuPosition='right'
       panes={panes}
+      activeIndex={2}
     />
   );
 };

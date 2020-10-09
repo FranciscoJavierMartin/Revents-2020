@@ -83,7 +83,7 @@ const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
                 <p>
                   Hosted by{' '}
                   <strong>
-                    <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostedUid}`}>
+                    <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostUid}`}>
                       {event.hostedBy}
                     </Link>
                   </strong>

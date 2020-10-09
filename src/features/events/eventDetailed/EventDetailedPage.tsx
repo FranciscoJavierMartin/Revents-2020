@@ -33,7 +33,7 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({ match }) => {
   const { error, isLoading } = useSelector<IRootState, IAsyncState>(
     (state) => state.async
   );
-  const isHost: boolean = !!(event?.hostedUid === currentUser?.uid);
+  const isHost: boolean = !!(event?.hostUid === currentUser?.uid);
   const isGoing: boolean = !!event?.attendeeIds.some(
     (a) => a === currentUser?.uid
   );
@@ -60,7 +60,7 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({ match }) => {
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendess={event?.attendees!!} hostUid={event?.hostedUid || ''}/>
+        <EventDetailedSidebar attendess={event?.attendees!!} hostUid={event?.hostUid || ''}/>
       </Grid.Column>
     </Grid>
   );

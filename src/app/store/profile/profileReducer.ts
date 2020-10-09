@@ -6,6 +6,7 @@ const initialState: IProfileState = {
   currentUserProfile: null,
   selectedProfile: null,
   photos: [],
+  profileEvents: [],
 };
 
 export default function profileReducer(
@@ -31,7 +32,13 @@ export default function profileReducer(
       res = {
         ...state,
         photos: payload,
-      }
+      };
+      break;
+    case profileActionName.LISTEN_TO_USER_EVENTS:
+      res = {
+        ...state,
+        profileEvents: payload,
+      };
       break;
     default:
       res = state;

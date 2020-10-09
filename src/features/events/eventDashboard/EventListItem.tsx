@@ -25,7 +25,7 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
               <Item.Header content={event.title} />
               <Item.Description>
                 Hosted by{' '}
-                <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostedUid}`}>
+                <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostUid}`}>
                   {event.hostedBy}
                 </Link>
               </Item.Description>

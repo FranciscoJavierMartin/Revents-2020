@@ -43,11 +43,11 @@ const ProfilePage: React.FC<IProfilePageProps> = ({ match }) => {
       <Grid.Column width={16}>
         <ProfileHeader
           profile={selectedProfile}
-          isCurrentUser={currentUser.uid === selectedProfile.id}
+          isCurrentUser={currentUser?.uid === selectedProfile.id}
         />
         <ProfileContent
           profile={selectedProfile}
-          isCurrentUser={currentUser.uid === selectedProfile.id}
+          isCurrentUser={currentUser?.uid === selectedProfile.id}
         />
       </Grid.Column>
     </Grid>

@@ -1,4 +1,8 @@
 import {
+  FilterKeyType,
+  FilterValueType,
+} from '../../common/constants/customTypes';
+import {
   EVENTS_COLLECTION_NAME,
   PHOTOS_COLLECTION_NAME,
   USERS_COLLECTION_NAME,
@@ -32,8 +36,29 @@ export function dataFromSnapshot(snapshot: any) {
   return res;
 }
 
-export function listenToEventsFromFirestore() {
-  return db.collection(EVENTS_COLLECTION_NAME).orderBy('date');
+export function listenToEventsFromFirestore(
+  predicate: Map<FilterKeyType, FilterValueType>
+): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  const user = firebase.auth().currentUser;
+
+  let eventsRef = db.collection(EVENTS_COLLECTION_NAME).orderBy('date');
+
+  switch (predicate.get('filter')) {
+    case 'isGoing':
+      eventsRef = eventsRef
+        .where('attendeeIds', 'array-contains', user?.uid)
+        .where('date', '>=', predicate.get('startDate'));
+      break;
+    case 'isHosting':
+      eventsRef = eventsRef
+        .where('hostUid', '==', user?.uid)
+        .where('date', '>=', predicate.get('startDate'));
+      break;
+    default:
+      eventsRef = eventsRef.where('date', '>=', predicate.get('startDate'));
+  }
+
+  return eventsRef;
 }
 
 export function listenToEventFromFirestore(eventId: string | undefined) {
@@ -45,7 +70,7 @@ export function addEventToFirestore(event: IEvent) {
 
   return db.collection(EVENTS_COLLECTION_NAME).add({
     ...event,
-    hostedUid: user?.uid,
+    hostUid: user?.uid,
     hostedBy: user?.displayName,
     hostPhotoURL: user?.photoURL || null,
     attendees: firebase.firestore.FieldValue.arrayUnion({
@@ -195,9 +220,39 @@ export async function cancelUserAttendance(event: IEvent) {
         attendeeIds: firebase.firestore.FieldValue.arrayRemove(user?.uid),
         attendees: eventDoc
           .data()
-          ?.attendees.filter((attendee: IAttendant) => attendee.id !== user?.uid),
+          ?.attendees.filter(
+            (attendee: IAttendant) => attendee.id !== user?.uid
+          ),
       });
   } catch (error) {
     throw error;
   }
+}
+
+export function getUserEventsQuery(
+  activeTab: number,
+  userUid: string
+): firebase.firestore.Query<firebase.firestore.DocumentData> {
+  const eventsRef = db.collection(EVENTS_COLLECTION_NAME);
+  const today = new Date();
+  let res: firebase.firestore.Query<firebase.firestore.DocumentData>;
+
+  switch (activeTab) {
+    case 1:
+      res = eventsRef
+        .where('attendeeIds', 'array-contains', userUid)
+        .where('date', '<=', today)
+        .orderBy('date', 'desc');
+      break;
+    case 2:
+      res = eventsRef.where('hostUid', '==', userUid).orderBy('date');
+      break;
+    default:
+      res = eventsRef
+        .where('attendeeIds', 'array-contains', userUid)
+        .where('date', '>=', today)
+        .orderBy('date');
+  }
+
+  return res;
 }

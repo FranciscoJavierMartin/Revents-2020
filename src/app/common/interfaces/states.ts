@@ -26,4 +26,5 @@ export interface IProfileState {
   currentUserProfile: any;
   selectedProfile: any;
   photos: IPhoto[];
+  profileEvents: IEvent[];
 }

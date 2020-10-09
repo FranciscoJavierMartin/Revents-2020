@@ -13,7 +13,7 @@ export interface IEvent {
   attendees: IAttendant[];
   isCancelled?: boolean;
   attendeeIds: string[];
-  hostedUid: string;
+  hostUid: string;
 }
 
 export interface IAttendant {
