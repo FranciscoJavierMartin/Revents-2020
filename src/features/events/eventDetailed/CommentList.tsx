@@ -76,7 +76,7 @@ const CommentList: React.FC<ICommentListProps> = (props) => {
           </Comment.Content>
           {comment.childNodes.length > 0 && (
             <Comment.Group>
-              <CommentList {...props} comments={comment.childNodes} />
+              <CommentList {...props} comments={comment.childNodes.reverse()} />
             </Comment.Group>
           )}
         </Comment>

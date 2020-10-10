@@ -70,7 +70,7 @@ const EventDetailedChat: React.FC<IEventDetailedChatProps> = ({ eventId }) => {
         />
         <Comment.Group>
           <CommentList
-            comments={createDataTree(comments)}
+            comments={createDataTree(comments).reverse()}
             closeForm={setShowReplayForm}
             showReplayForm={showReplayForm}
             eventId={eventId}
