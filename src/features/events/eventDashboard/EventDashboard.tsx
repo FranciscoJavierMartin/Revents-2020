@@ -14,6 +14,7 @@ import {
   FilterValueType,
 } from '../../../app/common/constants/customTypes';
 import NoEvents from './NoEvents';
+import EventsFeed from './EventsFeed';
 
 interface IEventDashboardProps {}
 
@@ -24,6 +25,9 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
   );
   const isLoading = useSelector<IRootState, boolean>(
     (state) => state.async.isLoading
+  );
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
   );
   const [predicate, setPredicate] = useState(
     new Map<FilterKeyType, FilterValueType>([
@@ -57,6 +61,7 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
         )}
       </Grid.Column>
       <Grid.Column width={6}>
+        {isAuthenticated && <EventsFeed />}
         <EventFilters
           predicate={predicate}
           setPredicate={handleSetPredicate}

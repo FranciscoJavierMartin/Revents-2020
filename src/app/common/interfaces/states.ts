@@ -28,4 +28,8 @@ export interface IProfileState {
   selectedProfile: any;
   photos: IPhoto[];
   profileEvents: IEvent[];
+  followers: any[];
+  followings: any[];
+  isFollowingUser: boolean;
+  feed: any[];
 }

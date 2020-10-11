@@ -4,8 +4,11 @@ import {
 } from '../../common/constants/customTypes';
 import {
   EVENTS_COLLECTION_NAME,
+  FOLLOWING_COLLECTION_NAME,
   PHOTOS_COLLECTION_NAME,
   USERS_COLLECTION_NAME,
+  USER_FOLLOWERS_COLLECTION_NAME,
+  USER_FOLLOWING_COLLECTION_NAME,
 } from '../../common/constants/firebase';
 import { IAttendant, IEvent, IPhoto } from '../../common/interfaces/models';
 import firebase from '../firebase';
@@ -255,4 +258,77 @@ export function getUserEventsQuery(
   }
 
   return res;
+}
+
+export async function followUser(profile: any) {
+  const user = firebase.auth().currentUser;
+  const batch = db.batch();
+
+  try {
+    batch.set(
+      db
+        .collection(FOLLOWING_COLLECTION_NAME)
+        .doc(user?.uid)
+        .collection(USER_FOLLOWING_COLLECTION_NAME)
+        .doc(profile.id),
+      {
+        displayName: profile.displayName,
+        photoURL: profile.photoURL,
+        uid: profile.id,
+      }
+    );
+    batch.update(db.collection(USERS_COLLECTION_NAME).doc(user?.uid), {
+      followingCount: firebase.firestore.FieldValue.increment(1),
+    });
+
+    return await batch.commit();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function unfollowUser(profile: any) {
+  const user = firebase.auth().currentUser;
+  const batch = db.batch();
+  try {
+    batch.delete(
+      db
+        .collection(FOLLOWING_COLLECTION_NAME)
+        .doc(user?.uid)
+        .collection(USER_FOLLOWING_COLLECTION_NAME)
+        .doc(profile.id)
+    );
+
+    batch.update(db.collection(USERS_COLLECTION_NAME).doc(user?.uid), {
+      followingCount: firebase.firestore.FieldValue.increment(-1),
+    });
+
+    return await batch.commit();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export function getFollowersCollection(profileId: string) {
+  return db
+    .collection(FOLLOWING_COLLECTION_NAME)
+    .doc(profileId)
+    .collection(USER_FOLLOWERS_COLLECTION_NAME);
+}
+
+export function getFollowingCollection(profileId: string) {
+  return db
+    .collection(FOLLOWING_COLLECTION_NAME)
+    .doc(profileId)
+    .collection(USER_FOLLOWING_COLLECTION_NAME);
+}
+
+export function getFollowingDoc(profileId: string) {
+  const userUid = firebase.auth().currentUser?.uid;
+  return db
+    .collection(FOLLOWING_COLLECTION_NAME)
+    .doc(userUid)
+    .collection(USER_FOLLOWING_COLLECTION_NAME)
+    .doc(profileId)
+    .get();
 }

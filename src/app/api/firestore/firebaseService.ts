@@ -1,4 +1,4 @@
-import { CHAT_REALTIME } from '../../common/constants/firebase';
+import { CHAT_REALTIME, POSTS_REALTIME } from '../../common/constants/firebase';
 import firebase from '../firebase';
 import { setUserProfileData } from './firestoreService';
 
@@ -70,7 +70,11 @@ export function deleteFromFirebaseStorage(filename: string) {
   return photoRef.delete();
 }
 
-export function addEventChatComment(eventId: string, comment: string, parentId?: string) {
+export function addEventChatComment(
+  eventId: string,
+  comment: string,
+  parentId?: string
+) {
   const user = firebase.auth().currentUser;
   const newComment = {
     diplayName: user?.displayName,
@@ -79,7 +83,7 @@ export function addEventChatComment(eventId: string, comment: string, parentId?:
     text: comment,
     date: Date.now(),
     parentId: parentId || '',
-    childNodes: []
+    childNodes: [],
   };
 
   return firebase
@@ -90,4 +94,13 @@ export function addEventChatComment(eventId: string, comment: string, parentId?:
 
 export function getEventChatRef(eventId: string) {
   return firebase.database().ref(`${CHAT_REALTIME}/${eventId}`).orderByKey();
+}
+
+export function getUserFeedRef() {
+  const user = firebase.auth().currentUser;
+  return firebase
+    .database()
+    .ref(`${POSTS_REALTIME}/${user?.uid}`)
+    .orderByKey()
+    .limitToLast(5);
 }

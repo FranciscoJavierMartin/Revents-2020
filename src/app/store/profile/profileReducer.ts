@@ -7,6 +7,10 @@ const initialState: IProfileState = {
   selectedProfile: null,
   photos: [],
   profileEvents: [],
+  followers: [],
+  followings: [],
+  isFollowingUser: false,
+  feed: [],
 };
 
 export default function profileReducer(
@@ -38,6 +42,43 @@ export default function profileReducer(
       res = {
         ...state,
         profileEvents: payload,
+      };
+      break;
+    case profileActionName.LISTEN_TO_FOLLOWERS:
+      res = {
+        ...state,
+        followers: payload,
+      };
+      break;
+    case profileActionName.LISTEN_TO_FOLLOWING:
+      res = {
+        ...state,
+        followings: payload,
+      };
+      break;
+    case profileActionName.SET_FOLLOW_USER:
+      res = {
+        ...state,
+        isFollowingUser: true,
+      };
+      break;
+    case profileActionName.SET_UNFOLLOW_USER:
+      res = {
+        ...state,
+        isFollowingUser: false,
+      };
+      break;
+    case profileActionName.CLEAR_FOLLOWINGS:
+      res = {
+        ...state,
+        followers: [],
+        followings: [],
+      };
+      break;
+    case profileActionName.LISTEN_TO_FEED:
+      res = {
+        ...state,
+        feed: payload
       };
       break;
     default:

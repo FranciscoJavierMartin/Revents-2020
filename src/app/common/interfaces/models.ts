@@ -51,3 +51,13 @@ export interface IComment {
   parentId?: string;
   childNodes: IComment[];
 }
+
+export interface IProfile {
+  createdAt: Date;
+  description: string;
+  displayName: string;
+  email: string;
+  photoURL: string;
+  followersCount: number;
+  followingCount: number;
+}

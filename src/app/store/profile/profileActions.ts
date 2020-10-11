@@ -29,3 +29,36 @@ export function listenToUserEvents(events: IEvent[]): IProfileAction {
     payload: events,
   };
 }
+
+export function listenToFollowers(followers: any): IProfileAction {
+  return {
+    type: profileActionName.LISTEN_TO_FOLLOWERS,
+    payload: followers,
+  };
+}
+
+export function listenToFollowings(followings: any): IProfileAction {
+  return {
+    type: profileActionName.LISTEN_TO_FOLLOWING,
+    payload: followings,
+  };
+}
+
+export function setFollowUser(): IProfileAction {
+  return {
+    type: profileActionName.SET_FOLLOW_USER,
+  };
+}
+
+export function setUnfollowUser(): IProfileAction {
+  return {
+    type: profileActionName.SET_UNFOLLOW_USER,
+  };
+}
+
+export function listenToFeed(feed: any[]): IProfileAction {
+  return {
+    type: profileActionName.LISTEN_TO_FEED,
+    payload: feed,
+  };
+}
