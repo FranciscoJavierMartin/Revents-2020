@@ -22,6 +22,9 @@ const EventDetailedChat: React.FC<IEventDetailedChatProps> = ({ eventId }) => {
   const comments = useSelector<IRootState, IComment[]>(
     (state) => state.event.comments
   );
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
+  );
   const [showReplayForm, setShowReplayForm] = useState<{
     open: boolean;
     commentId: string;
@@ -64,10 +67,12 @@ const EventDetailedChat: React.FC<IEventDetailedChatProps> = ({ eventId }) => {
         <Header>Chat about this event</Header>
       </Segment>
       <Segment attached>
-        <EventDetailedChatForm
-          eventId={eventId}
-          closeForm={setShowReplayForm}
-        />
+        {isAuthenticated && (
+          <EventDetailedChatForm
+            eventId={eventId}
+            closeForm={setShowReplayForm}
+          />
+        )}
         <Comment.Group>
           <CommentList
             comments={createDataTree(comments).reverse()}

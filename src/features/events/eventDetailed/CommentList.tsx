@@ -5,6 +5,8 @@ import { formatDistance } from 'date-fns';
 import { IComment } from '../../../app/common/interfaces/models';
 import { PROFILE_PAGE_ROUTE } from '../../../app/common/constants/routes';
 import EventDetailedChatForm from './EventDetailedChatForm';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../app/common/interfaces/states';
 
 interface ICommentListProps {
   eventId: string;
@@ -30,6 +32,9 @@ const CommentList: React.FC<ICommentListProps> = (props) => {
     closeForm,
     handleCloseReplayForm,
   } = props;
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
+  );
   return (
     <>
       {comments.map((comment: IComment) => (
@@ -53,26 +58,28 @@ const CommentList: React.FC<ICommentListProps> = (props) => {
                 </span>
               ))}
             </Comment.Text>
-            <Comment.Actions>
-              <Comment.Action
-                onClick={() => {
-                  closeForm({
-                    open: true,
-                    commentId: comment.id,
-                  });
-                }}
-              >
-                Replay
-              </Comment.Action>
-              {showReplayForm.open &&
-                showReplayForm.commentId === comment.id && (
-                  <EventDetailedChatForm
-                    eventId={eventId}
-                    parentId={comment.id}
-                    closeForm={handleCloseReplayForm}
-                  />
-                )}
-            </Comment.Actions>
+            {isAuthenticated && (
+              <Comment.Actions>
+                <Comment.Action
+                  onClick={() => {
+                    closeForm({
+                      open: true,
+                      commentId: comment.id,
+                    });
+                  }}
+                >
+                  Replay
+                </Comment.Action>
+                {showReplayForm.open &&
+                  showReplayForm.commentId === comment.id && (
+                    <EventDetailedChatForm
+                      eventId={eventId}
+                      parentId={comment.id}
+                      closeForm={handleCloseReplayForm}
+                    />
+                  )}
+              </Comment.Actions>
+            )}
           </Comment.Content>
           {comment.childNodes.length > 0 && (
             <Comment.Group>

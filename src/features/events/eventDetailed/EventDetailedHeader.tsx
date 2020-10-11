@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import {
+  LOGIN_PAGE_ROUTE,
   MANAGE_EVENT_PAGE_ROUTE,
   PROFILE_PAGE_ROUTE,
 } from '../../../app/common/constants/routes';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { format } from 'date-fns';
-import { boolean } from 'yup';
 import { toast } from 'react-toastify';
 import {
   addUserAttendance,
   cancelUserAttendance,
 } from '../../../app/api/firestore/firestoreService';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../app/common/interfaces/states';
 
 const eventImageStyle = {
   filter: 'brightness(30%)',
@@ -38,16 +40,23 @@ const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
   isHost,
   isGoing,
 }) => {
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
+  );
   async function handleUserJoinEvent() {
-    setIsLoading(true);
-    try {
-      await addUserAttendance(event);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
+    if (isAuthenticated) {
+      setIsLoading(true);
+      try {
+        await addUserAttendance(event);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      history.push(LOGIN_PAGE_ROUTE);
     }
   }
 
