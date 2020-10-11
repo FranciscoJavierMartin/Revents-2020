@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
 import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 import SocialLogin from './SocialLogin';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../app/common/interfaces/states';
 
 interface IFormValues {
   email: string;
@@ -14,12 +16,16 @@ interface IFormValues {
   auth?: string;
 }
 
-const LoginPage = () => {
+interface ILoginPageProps {}
+
+const LoginPage: React.FC<any> = () => {
   const history = useHistory();
   const validationSchema = Yup.object({
     email: Yup.string().required().email(),
     password: Yup.string().required(),
   });
+  const { prevLocation } = useSelector<IRootState, any>((state) => state.auth);
+
   return (
     <div>
       <Formik
@@ -34,7 +40,7 @@ const LoginPage = () => {
             setSubmitting(false);
             history.push(EVENTS_PAGE_ROUTE);
           } catch (error) {
-            setErrors({auth: error.message})
+            setErrors({ auth: error.message });
             setSubmitting(false);
           }
         }}
@@ -43,7 +49,14 @@ const LoginPage = () => {
           <Form className='ui form'>
             <InputText name='email' placeholder='Email address' />
             <InputText name='password' placeholder='Password' type='password' />
-            {errors.auth && <Label basic color='red' style={{marginBottom: 10}} content={errors.auth}/>}
+            {errors.auth && (
+              <Label
+                basic
+                color='red'
+                style={{ marginBottom: 10 }}
+                content={errors.auth}
+              />
+            )}
             <Button
               loading={isSubmitting}
               disabled={!isValid || !dirty || isSubmitting}
@@ -54,7 +67,7 @@ const LoginPage = () => {
               content='Login'
             />
             <Divider horizontal>Or</Divider>
-            <SocialLogin/>
+            <SocialLogin />
           </Form>
         )}
       </Formik>

@@ -15,6 +15,7 @@ import {
 } from '../../../app/api/firestore/firestoreService';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../app/common/interfaces/states';
+import UnAuthModal from '../../auth/UnAuthModal';
 
 const eventImageStyle = {
   filter: 'brightness(30%)',
@@ -41,6 +42,7 @@ const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
   isGoing,
 }) => {
   const history = useHistory();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const isAuthenticated = useSelector<IRootState, boolean>(
     (state) => state.auth.authenticated
@@ -72,66 +74,73 @@ const EventDetailedHeader: React.FC<IEventDetailedHeaderProps> = ({
   }
 
   return (
-    <Segment.Group>
-      <Segment basic attached='top' style={{ padding: '0' }}>
-        <Image
-          src={`/assets/categoryImages/${event.category}.jpg`}
-          fluid
-          style={eventImageStyle}
-        />
-        <Segment basic style={eventImageTextStyle}>
-          <Item.Group>
-            <Item>
-              <Item.Content>
-                <Header
-                  size='huge'
-                  content='Event title'
-                  style={{ color: 'white' }}
-                />
-                <p>{format(event.date, 'MMMM d, yyyy h:mm a')}</p>
-                <p>
-                  Hosted by{' '}
-                  <strong>
-                    <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostUid}`}>
-                      {event.hostedBy}
-                    </Link>
-                  </strong>
-                </p>
-              </Item.Content>
-            </Item>
-          </Item.Group>
+    <>
+      {isModalOpen && <UnAuthModal setIsModalOpen={setIsModalOpen}/>}
+      <Segment.Group>
+        <Segment basic attached='top' style={{ padding: '0' }}>
+          <Image
+            src={`/assets/categoryImages/${event.category}.jpg`}
+            fluid
+            style={eventImageStyle}
+          />
+          <Segment basic style={eventImageTextStyle}>
+            <Item.Group>
+              <Item>
+                <Item.Content>
+                  <Header
+                    size='huge'
+                    content='Event title'
+                    style={{ color: 'white' }}
+                  />
+                  <p>{format(event.date, 'MMMM d, yyyy h:mm a')}</p>
+                  <p>
+                    Hosted by{' '}
+                    <strong>
+                      <Link to={`${PROFILE_PAGE_ROUTE}/${event.hostUid}`}>
+                        {event.hostedBy}
+                      </Link>
+                    </strong>
+                  </p>
+                </Item.Content>
+              </Item>
+            </Item.Group>
+          </Segment>
         </Segment>
-      </Segment>
-      <Segment attached='bottom' clearing>
-        {!isHost && (
-          <>
-            {isGoing ? (
-              <Button onClick={handleUserLeaveEvent} loading={isLoading}>
-                Cancel My Place
-              </Button>
-            ) : (
-              <Button
-                onClick={handleUserJoinEvent}
-                loading={isLoading}
-                color='teal'
-              >
-                Join this event
-              </Button>
-            )}
-          </>
-        )}
-        {isHost && (
-          <Button
-            color='orange'
-            floated='right'
-            as={Link}
-            to={`${MANAGE_EVENT_PAGE_ROUTE}/${event.id}`}
-          >
-            Manage Event
-          </Button>
-        )}
-      </Segment>
-    </Segment.Group>
+        <Segment attached='bottom' clearing>
+          {!isHost && (
+            <>
+              {isGoing ? (
+                <Button onClick={handleUserLeaveEvent} loading={isLoading}>
+                  Cancel My Place
+                </Button>
+              ) : (
+                <Button
+                  onClick={
+                    isAuthenticated
+                      ? handleUserJoinEvent
+                      : () => setIsModalOpen(true)
+                  }
+                  loading={isLoading}
+                  color='teal'
+                >
+                  Join this event
+                </Button>
+              )}
+            </>
+          )}
+          {isHost && (
+            <Button
+              color='orange'
+              floated='right'
+              as={Link}
+              to={`${MANAGE_EVENT_PAGE_ROUTE}/${event.id}`}
+            >
+              Manage Event
+            </Button>
+          )}
+        </Segment>
+      </Segment.Group>
+    </>
   );
 };
 

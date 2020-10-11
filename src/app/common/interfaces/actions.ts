@@ -1,6 +1,7 @@
+import { LOCATION_CHANGE } from 'connected-react-router';
 import { asyncActionName, profileActionName } from './../constants/actionsNames';
 import { authActionName, eventActionsName } from '../constants/actionsNames';
-import { IEvent } from './models';
+
 
 export interface IEventAction {
   type: eventActionsName;
@@ -8,7 +9,7 @@ export interface IEventAction {
 }
 
 export interface IAuthAction {
-  type: authActionName;
+  type: authActionName | typeof LOCATION_CHANGE;
   payload?: any;
 }
 

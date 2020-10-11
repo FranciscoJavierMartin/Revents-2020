@@ -29,6 +29,7 @@ import { useSelector } from 'react-redux';
 import { IAsyncState, IRootState } from '../common/interfaces/states';
 import LoadingComponent from './LoadingComponent';
 import ProfilePage from '../../features/profiles/profilePage/ProfilePage';
+import PrivateRoute from './PrivateRoute';
 
 function App() {
   const { key } = useLocation();
@@ -58,7 +59,7 @@ function App() {
                   component={EventDetailedPage}
                   path={`${EVENT_DETAIL_PAGE_ROUTE}/:id`}
                 />
-                <Route
+                <PrivateRoute
                   component={EventForm}
                   key={key}
                   path={[
@@ -68,7 +69,7 @@ function App() {
                 />
                 <Route path={LOGIN_PAGE_ROUTE} component={LoginPage} />
                 <Route path={REGISTER_PAGE_ROUTE} component={RegisterPage} />
-                <Route path={ACCOUNT_PAGE_ROUTE} component={AccountPage} />
+                <PrivateRoute path={ACCOUNT_PAGE_ROUTE} component={AccountPage} />
                 <Route path={`${PROFILE_PAGE_ROUTE}/:id`} component={ProfilePage} />
                 <Route path={ERROR_PAGE_ROUTE} component={ErrorComponent} />
               </Container>

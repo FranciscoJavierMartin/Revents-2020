@@ -1,3 +1,4 @@
+import { LOCATION_CHANGE } from 'connected-react-router';
 import { authActionName } from '../../common/constants/actionsNames';
 import { IAuthAction } from '../../common/interfaces/actions';
 import { IAuthState } from '../../common/interfaces/states';
@@ -8,6 +9,8 @@ const initialState: IAuthState = {
     email: '',
     photoURL: null,
   },
+  prevLocation: null,
+  currentLocation: null,
 };
 
 export default function authReducer(
@@ -37,6 +40,13 @@ export default function authReducer(
         ...state,
         authenticated: false,
         currentUser: null,
+      };
+      break;
+    case LOCATION_CHANGE:
+      res = {
+        ...state,
+        prevLocation: state.currentLocation,
+        currentLocation: payload.location,
       };
       break;
     default:

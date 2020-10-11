@@ -1,3 +1,5 @@
+import { LOCATION_CHANGE } from 'connected-react-router';
+
 export enum eventActionsName {
   FETCH_EVENTS = 'FETCH_EVENTS',
   CREATE_EVENT = 'CREATE_EVENT',

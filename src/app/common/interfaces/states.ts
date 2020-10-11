@@ -17,6 +17,8 @@ export interface IEventsState {
 export interface IAuthState {
   authenticated: boolean;
   currentUser: any;
+  prevLocation: any;
+  currentLocation: any;
 }
 
 export interface IAsyncState {
