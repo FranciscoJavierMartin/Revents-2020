@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
@@ -10,7 +10,10 @@ import {
 } from '../../../app/common/interfaces/states';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { listenToSelectedUserProfile } from '../../../app/store/profile/profileActions';
+import {
+  clearSelectedUser,
+  listenToSelectedUserProfile,
+} from '../../../app/store/profile/profileActions';
 import ProfileContent from './ProfileContent';
 import ProfileHeader from './ProfileHeader';
 
@@ -36,10 +39,17 @@ const ProfilePage: React.FC<IProfilePageProps> = ({ match }) => {
     deps: [dispatch, match.params.id],
   });
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearSelectedUser());
+    };
+  }, [dispatch]);
+
+  
   return (isLoading && !selectedProfile) || (!selectedProfile && !error) ? (
     <LoadingComponent content='Loading profile...' />
   ) : !selectedProfile ? (
-  <h1>No profile {match.params.id}</h1>
+    <h1>No profile {match.params.id}</h1>
   ) : (
     <Grid>
       <Grid.Column width={16}>

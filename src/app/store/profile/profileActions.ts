@@ -62,3 +62,9 @@ export function listenToFeed(feed: any[]): IProfileAction {
     payload: feed,
   };
 }
+
+export function clearSelectedUser(): IProfileAction{
+  return {
+    type: profileActionName.CLEAR_SELECTED_USER,
+  }
+}

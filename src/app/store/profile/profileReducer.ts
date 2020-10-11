@@ -81,6 +81,12 @@ export default function profileReducer(
         feed: payload
       };
       break;
+    case profileActionName.CLEAR_SELECTED_USER:
+      res = {
+        ...state,
+        selectedProfile: null,
+      };
+      break;
     default:
       res = state;
   }

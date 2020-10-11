@@ -34,6 +34,9 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({
 }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
+  );
   const isFollowingUser = useSelector<IRootState, boolean>(
     (state) => state.profile.isFollowingUser
   );
@@ -53,15 +56,14 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({
   );
 
   useEffect(() => {
-    if (!isCurrentUser) {
+    if (!isCurrentUser && isAuthenticated) {
       setIsLoading(true);
-
       fetchFollowingDoc().finally(() => setIsLoading(false));
     }
     return () => {
       dispatch({ type: profileActionName.CLEAR_FOLLOWINGS });
     };
-  }, [dispatch, profile.id, isCurrentUser, fetchFollowingDoc]);
+  }, [dispatch, profile.id, isCurrentUser, fetchFollowingDoc, isAuthenticated]);
 
   async function handleFollowUser() {
     setIsLoading(true);
