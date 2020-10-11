@@ -91,7 +91,6 @@ const PhotosTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
               {photos.map((photo) => (
                 <Card key={photo.id}>
                   <Image src={photo.url} />
-
                   <Button.Group fluid widths={2}>
                     <Button
                       name={photo.id}

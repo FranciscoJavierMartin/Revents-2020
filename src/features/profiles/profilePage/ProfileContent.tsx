@@ -38,12 +38,7 @@ const ProfileContent: React.FC<IProfileContentProps> = ({
         <AboutTab profile={profile} isCurrentUser={isCurrentUser} />
       ),
     },
-    {
-      menuItem: 'Photos',
-      render: () => (
-        <PhotosTab profile={profile} isCurrentUser={isCurrentUser} />
-      ),
-    },
+
     {
       menuItem: 'Events',
       render: () => (
@@ -90,10 +85,19 @@ const ProfileContent: React.FC<IProfileContentProps> = ({
     },
   ];
 
+  if (isCurrentUser) {
+    panes.splice(1, 0, {
+      menuItem: 'Photos',
+      render: () => (
+        <PhotosTab profile={profile} isCurrentUser={isCurrentUser} />
+      ),
+    });
+  }
+
   useEffect(() => {
     return () => {
       setActiveTab(0);
-    }
+    };
   }, [profile.id]);
 
   return (
