@@ -11,6 +11,7 @@ export interface IEventsState {
   events: IEvent[];
   comments: IComment[];
   moreEvents: boolean;
+  selectedEvent: IEvent | null;
 }
 
 export interface IAuthState {

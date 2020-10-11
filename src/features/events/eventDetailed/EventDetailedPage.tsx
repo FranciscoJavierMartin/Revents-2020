@@ -8,7 +8,7 @@ import { IEvent } from '../../../app/common/interfaces/models';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { listenToEvents } from '../../../app/store/events/eventActions';
+import { fetchEvents, listenToSelectedEvent } from '../../../app/store/events/eventActions';
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';
@@ -26,8 +26,8 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({ match }) => {
   const currentUser = useSelector<IRootState, any>(
     (state) => state.auth.currentUser
   );
-  const event = useSelector<IRootState, IEvent | undefined>((state) =>
-    state.event.events?.find((evt) => evt.id === match.params.id)
+  const event = useSelector<IRootState, IEvent | null>((state) =>
+    state.event.selectedEvent
   );
 
   const { error, isLoading } = useSelector<IRootState, IAsyncState>(
@@ -40,7 +40,7 @@ const EventDetailedPage: React.FC<IEventDetailedPageProps> = ({ match }) => {
 
   useFirestoreDoc({
     query: () => listenToEventFromFirestore(match.params.id),
-    data: (event: any) => dispatch(listenToEvents([event])),
+    data: (event: any) => dispatch(listenToSelectedEvent(event)),
     deps: [match.params.id, dispatch],
   });
 

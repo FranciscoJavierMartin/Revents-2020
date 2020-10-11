@@ -11,7 +11,7 @@ import {
 } from '../../../app/common/constants/routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
-import { listenToEvents } from '../../../app/store/events/eventActions';
+import { listenToSelectedEvent } from '../../../app/store/events/eventActions';
 import * as Yup from 'yup';
 import InputText from '../../../app/common/form/InputText';
 import InputTextArea from '../../../app/common/form/InputTextArea';
@@ -39,10 +39,12 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
   const dispatch = useDispatch();
   const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
-  const event = useSelector<IRootState, IEvent | undefined>((state) =>
-    state.event.events.find((e) => e.id === match.params.id)
+  const event = useSelector<IRootState, IEvent | null>(
+    (state) => state.event.selectedEvent
   );
-  const { isLoading, error } = useSelector<IRootState, IAsyncState>((state) => state.async);
+  const { isLoading, error } = useSelector<IRootState, IAsyncState>(
+    (state) => state.async
+  );
 
   const initialValues: any = event ?? {
     title: '',
@@ -91,7 +93,7 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
 
   useFirestoreDoc({
     query: () => listenToEventFromFirestore(match.params.id),
-    data: (event: any) => dispatch(listenToEvents([event])),
+    data: (event: any) => dispatch(listenToSelectedEvent(event)),
     deps: [match.params.id, dispatch],
     shouldExecute: !!match.params.id,
   });

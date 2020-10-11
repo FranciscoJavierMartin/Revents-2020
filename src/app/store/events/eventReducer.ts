@@ -8,6 +8,7 @@ const initialState: IEventsState = {
   events: [],
   comments: [],
   moreEvents: false,
+  selectedEvent: null,
 };
 
 export default function eventReducer(
@@ -17,11 +18,16 @@ export default function eventReducer(
   let res: IEventsState = state;
   switch (type) {
     case eventActionsName.FETCH_EVENTS:
-      console.log(payload.events);
       res = {
         ...state,
         events: [...state.events, ...payload.events],
-        moreEvents: payload.events,
+        moreEvents: payload.moreEvents,
+      };
+      break;
+    case eventActionsName.LISTEN_TO_SELECTED_EVENT:
+      res = {
+        ...state,
+        selectedEvent: payload,
       };
       break;
     case eventActionsName.CREATE_EVENT:
@@ -61,6 +67,13 @@ export default function eventReducer(
       res = {
         ...state,
         comments: [],
+      };
+      break;
+    case eventActionsName.CLEAR_EVENTS:
+      res = {
+        ...state,
+        events: [],
+        moreEvents: true,
       };
       break;
     default:

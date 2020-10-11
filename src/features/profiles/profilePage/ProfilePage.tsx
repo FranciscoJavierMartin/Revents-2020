@@ -38,6 +38,8 @@ const ProfilePage: React.FC<IProfilePageProps> = ({ match }) => {
 
   return (isLoading && !selectedProfile) || (!selectedProfile && !error) ? (
     <LoadingComponent content='Loading profile...' />
+  ) : !selectedProfile ? (
+  <h1>No profile {match.params.id}</h1>
   ) : (
     <Grid>
       <Grid.Column width={16}>

@@ -1,6 +1,6 @@
 import {
   dataFromSnapshot,
-  listenToEventsFromFirestore,
+  fetchEventsFromFirestore,
 } from '../../api/firestore/firestoreService';
 import { eventActionsName } from '../../common/constants/actionsNames';
 import { IEventAction } from '../../common/interfaces/actions';
@@ -19,7 +19,7 @@ export function fetchEvents(
   return async function (dispatch: any) {
     dispatch(asyncActionStart());
     try {
-      const snapshot = await listenToEventsFromFirestore(
+      const snapshot = await fetchEventsFromFirestore(
         predicate,
         limit,
         lastDocSnapshot
@@ -29,7 +29,7 @@ export function fetchEvents(
       const events = snapshot.docs.map((doc) => dataFromSnapshot(doc));
       dispatch({
         type: eventActionsName.FETCH_EVENTS,
-        payload: { events, moreEvents },
+        payload: { events, moreEvents, lastVisible },
       });
       dispatch(asyncActionFinish());
       return lastVisible;
@@ -39,10 +39,10 @@ export function fetchEvents(
   };
 }
 
-export function listenToEvents(events: IEvent[]) {
+export function listenToSelectedEvent(event: IEvent): IEventAction {
   return {
-    type: eventActionsName.FETCH_EVENTS,
-    payload: events,
+    type: eventActionsName.LISTEN_TO_SELECTED_EVENT,
+    payload: event,
   };
 }
 
@@ -71,5 +71,11 @@ export function listenToEventChat(comments: IComment[]): IEventAction {
   return {
     type: eventActionsName.LISTEN_TO_EVENT_CHAT,
     payload: comments,
+  };
+}
+
+export function clearEvents(): IEventAction {
+  return {
+    type: eventActionsName.CLEAR_EVENTS,
   };
 }

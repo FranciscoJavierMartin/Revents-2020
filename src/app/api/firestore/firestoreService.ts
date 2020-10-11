@@ -39,7 +39,7 @@ export function dataFromSnapshot(snapshot: any) {
   return res;
 }
 
-export function listenToEventsFromFirestore(
+export function fetchEventsFromFirestore(
   predicate: Map<FilterKeyType, FilterValueType>,
   limit: number,
   lastDocSnapshot = null

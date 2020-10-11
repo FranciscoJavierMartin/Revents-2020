@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid } from 'semantic-ui-react';
+import { Grid, Loader } from 'semantic-ui-react';
 import EventList from './EventList';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,12 +8,10 @@ import {
 } from '../../../app/common/interfaces/states';
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import EventFilters from './EventFilters';
-import { listenToEventsFromFirestore } from '../../../app/api/firestore/firestoreService';
 import {
+  clearEvents,
   fetchEvents,
-  listenToEvents,
 } from '../../../app/store/events/eventActions';
-import useFirestoreCollection from '../../../app/hooks/useFirestoreCollection';
 import {
   FilterKeyType,
   FilterValueType,
@@ -45,14 +43,10 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
   );
 
   function handleSetPredicate(key: FilterKeyType, value: FilterValueType) {
+    dispatch(clearEvents());
+    setLastSnapshot(null);
     setPredicate(new Map(predicate.set(key, value)));
   }
-
-  useFirestoreCollection({
-    query: () => listenToEventsFromFirestore(predicate, limit),
-    data: (events: any) => dispatch(listenToEvents(events)),
-    deps: [dispatch, predicate],
-  });
 
   useEffect(() => {
     setIsInitialLoading(true);
@@ -62,6 +56,9 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
         setIsInitialLoading(false);
       }
     );
+    return () => {
+      dispatch(clearEvents());
+    };
   }, [dispatch, predicate]);
 
   function handleFetchNextEvents() {
@@ -80,17 +77,12 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
             <EventListItemPlaceholder />
           </>
         ) : events && events.length > 0 ? (
-          <>
-            <EventList events={events} />
-            <Button
-              loading={isLoadingEvents}
-              disabled={!moreEvents}
-              onClick={handleFetchNextEvents}
-              color='green'
-              content='More ...'
-              floated='right'
-            />
-          </>
+          <EventList
+            events={events}
+            getNextEvents={handleFetchNextEvents}
+            loading={isLoadingEvents}
+            moreEvents={moreEvents}
+          />
         ) : (
           <NoEvents />
         )}
@@ -102,6 +94,9 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
           setPredicate={handleSetPredicate}
           isLoading={isLoadingEvents}
         />
+      </Grid.Column>
+      <Grid.Column width={10}>
+        <Loader active={isLoadingEvents} />
       </Grid.Column>
     </Grid>
   );

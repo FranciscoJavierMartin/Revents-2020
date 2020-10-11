@@ -18,7 +18,6 @@ export default function useFirestoreDoc({
   useEffect(() => {
     if (shouldExecute) {
       dispatch(asyncActionStart());
-
       const unsubscribe = query().onSnapshot(
         (snapshot: any) => {
           if (!snapshot.exists) {
@@ -36,7 +35,9 @@ export default function useFirestoreDoc({
         (error: any) => dispatch(asyncActionError(error))
       );
 
-      return unsubscribe;
+      return () => {
+        unsubscribe();
+      };
     }
   }, deps); // eslint-disable-line react-hooks/exhaustive-deps
 }

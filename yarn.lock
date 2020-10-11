@@ -2011,6 +2011,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-infinite-scroller@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@types/react-infinite-scroller/-/react-infinite-scroller-1.2.1.tgz#1cd747ef8f50d3c883e375c0491a906e5436fcb2"
+  integrity sha512-64bpbqdSgtmy1zSZ2AQoFzguwZO7TyKjqJRTEnfNMCAQbnrX90kz+rYufZyY9CmzhwpXMwRO8xR9fMQnbYUkgQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-places-autocomplete@^7.2.6":
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/@types/react-places-autocomplete/-/react-places-autocomplete-7.2.6.tgz#2e24c1de8ad1088bd34b7825c0bfd255566855db"
@@ -9845,6 +9852,13 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-infinite-scroller@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroller/-/react-infinite-scroller-1.2.4.tgz#f67eaec4940a4ce6417bebdd6e3433bfc38826e9"
+  integrity sha512-/oOa0QhZjXPqaD6sictN2edFMsd3kkMiE19Vcz5JDgHpzEJVqYcmq+V3mkwO88087kvKGe1URNksHEOt839Ubw==
+  dependencies:
+    prop-types "^15.5.8"
 
 react-is@^16.12.0, react-is@^16.6.0, react-is@^16.6.3, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.13.1"
