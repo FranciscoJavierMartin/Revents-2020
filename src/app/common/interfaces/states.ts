@@ -10,6 +10,7 @@ export interface IRootState {
 export interface IEventsState {
   events: IEvent[];
   comments: IComment[];
+  moreEvents: boolean;
 }
 
 export interface IAuthState {

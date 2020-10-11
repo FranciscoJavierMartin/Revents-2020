@@ -7,6 +7,7 @@ import { eventActionsName } from '../../common/constants/actionsNames';
 const initialState: IEventsState = {
   events: [],
   comments: [],
+  moreEvents: false,
 };
 
 export default function eventReducer(
@@ -16,9 +17,11 @@ export default function eventReducer(
   let res: IEventsState = state;
   switch (type) {
     case eventActionsName.FETCH_EVENTS:
+      console.log(payload.events);
       res = {
         ...state,
-        events: payload,
+        events: [...state.events, ...payload.events],
+        moreEvents: payload.events,
       };
       break;
     case eventActionsName.CREATE_EVENT:

@@ -40,11 +40,17 @@ export function dataFromSnapshot(snapshot: any) {
 }
 
 export function listenToEventsFromFirestore(
-  predicate: Map<FilterKeyType, FilterValueType>
+  predicate: Map<FilterKeyType, FilterValueType>,
+  limit: number,
+  lastDocSnapshot = null
 ): firebase.firestore.Query<firebase.firestore.DocumentData> {
   const user = firebase.auth().currentUser;
 
-  let eventsRef = db.collection(EVENTS_COLLECTION_NAME).orderBy('date');
+  let eventsRef = db
+    .collection(EVENTS_COLLECTION_NAME)
+    .orderBy('date')
+    .startAfter(lastDocSnapshot)
+    .limit(limit);
 
   switch (predicate.get('filter')) {
     case 'isGoing':

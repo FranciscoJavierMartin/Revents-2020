@@ -23,7 +23,9 @@ const AboutTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
           />
           {isCurrentUser && (
             <Button
-              onClick={() => setEditMode(true)}
+              onClick={() =>
+                setEditMode((previousState: boolean) => !previousState)
+              }
               floated='right'
               basic
               content={editMode ? 'Cancel' : 'Edit'}
@@ -37,10 +39,10 @@ const AboutTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
             <>
               <div style={{ marginBottom: 10 }}>
                 <strong>
-                  Member since: Disabled for now
-                  {/*profile &&
+                  Member since:{' '}
+                  {profile &&
                     profile.createdAt &&
-                    format(profile.createdAt, 'dd MMM yyyy')*/}
+                    format(new Date(profile.createdAt), 'dd MMM yyyy')}
                 </strong>
                 <div>{profile.description || null}</div>
               </div>

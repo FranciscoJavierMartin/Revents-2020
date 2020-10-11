@@ -61,6 +61,92 @@ exports.removeFollowing = functions.firestore
     }
   });
 
+exports.updateUserData = functions.firestore
+  .document('users/{userUid}')
+  .onUpdate(async (snapshot, context) => {
+    const batch = db.batch();
+    const before = snapshot.before.data();
+    const after = snapshot.after.data();
+    const previousPhotoURL = before.photoURL;
+    const newPhotoURL = after.photoURL;
+    const previousDisplayName = before.displayName;
+    const newDisplayName = after.displayName;
+
+    if (
+      previousPhotoURL !== newPhotoURL ||
+      previousDisplayName !== newDisplayName
+    ) {
+      const goingEventsByUser = await db
+        .collection('events')
+        .where('attendeeIds', 'array-contains', context.params.userUid)
+        .get();
+
+      goingEventsByUser.forEach((event) => {
+        const eventData = event.data();
+        let hostPhotoURL = eventData.hostPhotoURL;
+        let hostedBy = eventData.hostedBy;
+
+        if (eventData.hostUid === context.params.userUid) {
+          hostPhotoURL = newPhotoURL;
+          hostedBy = newDisplayName;
+        }
+
+        const indexUserOnAttendee = eventData.attendees.findIndex(
+          (attendant) => attendant.id === context.params.userUid
+        );
+        eventData.attendees[indexUserOnAttendee].photoURL = newPhotoURL;
+        eventData.attendees[indexUserOnAttendee].displayName = newDisplayName;
+
+        batch.update(db.collection('events').doc(event.id), {
+          hostPhotoURL,
+          hostedBy,
+          attendees: eventData.attendees,
+        });
+      });
+
+      const followers = await db
+        .collection('following')
+        .doc(context.params.userUid)
+        .collection('userFollowers')
+        .get();
+      const followings = await db
+        .collection('following')
+        .doc(context.params.userUid)
+        .collection('userFollowing')
+        .get();
+
+      followers.forEach((user) => {
+        batch.update(
+          db
+            .collection('following')
+            .doc(user.id)
+            .collection('userFollowing')
+            .doc(context.params.userUid),
+          {
+            photoURL: newPhotoURL,
+            displayName: newDisplayName,
+          }
+        );
+      });
+
+      followings.forEach((user) => {
+        batch.update(
+          db
+            .collection('following')
+            .doc(user.id)
+            .collection('userFollowers')
+            .doc(context.params.userUid),
+          {
+            photoURL: newPhotoURL,
+            displayName: newDisplayName,
+          }
+        );
+      });
+
+      return batch.commit();
+    }
+  });
+
 exports.eventUpdated = functions.firestore
   .document('events/{eventId}')
   .onUpdate(async (snapshot, context) => {
@@ -77,12 +163,16 @@ exports.eventUpdated = functions.firestore
           .collection('userFollowers')
           .get();
         followerDocs.forEach((doc) => {
-          
           admin
             .database()
             .ref(`/posts/${doc.id}`)
             .push(
-              newPost(attendeeJoined, 'joined-event', context.params.eventId, before)
+              newPost(
+                attendeeJoined,
+                'joined-event',
+                context.params.eventId,
+                before
+              )
             );
         });
       } catch (error) {
@@ -104,7 +194,14 @@ exports.eventUpdated = functions.firestore
           admin
             .database()
             .ref(`/posts/${doc.id}`)
-            .push(newPost(attendeeLeft, 'left-event', context.params.eventId, before));
+            .push(
+              newPost(
+                attendeeLeft,
+                'left-event',
+                context.params.eventId,
+                before
+              )
+            );
         });
       } catch (error) {
         console.log(error);
@@ -120,6 +217,6 @@ function newPost(user, code, eventId, event) {
     displayName: user.displayName,
     eventId,
     userUid: user.id,
-    title: event.title
+    title: event.title,
   };
 }
