@@ -114,7 +114,7 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({
             <Statistic label='Followers' value={profile.followersCount || 0} />
             <Statistic label='Following' value={profile.followingCount || 0} />
           </Statistic.Group>
-          {!isCurrentUser && (
+          {isAuthenticated && !isCurrentUser && (
             <>
               <Divider />
               <Reveal animated='move'>
