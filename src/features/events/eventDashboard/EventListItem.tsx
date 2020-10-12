@@ -9,12 +9,20 @@ import {
 import { IAttendant, IEvent } from '../../../app/common/interfaces/models';
 import EventListAttendee from './EventListAttendee';
 import { deleteEventInFirestore } from '../../../app/api/firestore/firestoreService';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../app/common/interfaces/states';
 
 interface EventListItemProps {
   event: IEvent;
 }
 
 const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
+  const isLoading = useSelector<IRootState, boolean>(
+    (state) => state.async.isLoading
+  );
+  const currentUserId = useSelector<IRootState, string | undefined>(
+    (state) => state.auth.currentUser.uid
+  );
   return (
     <Segment.Group>
       <Segment>
@@ -59,17 +67,21 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
       </Segment>
       <Segment clearing>
         <div>{event.description}</div>
-        <Button
-          color='red'
-          floated='right'
-          content='Delete'
-          onClick={() => deleteEventInFirestore(event.id)}
-        />
+        {currentUserId === event.hostUid && (
+          <Button
+            color='red'
+            floated='right'
+            content='Delete'
+            loading={isLoading}
+            onClick={() => deleteEventInFirestore(event.id)}
+          />
+        )}
         <Button
           as={Link}
           to={`${EVENT_DETAIL_PAGE_ROUTE}/${event.id}`}
           color='teal'
           floated='right'
+          disabled={isLoading}
           content='View'
         />
       </Segment>
