@@ -4,7 +4,7 @@ const NoEvents = () => {
   return (
     <>
      <h1>No events available</h1> 
-     <h3>Please chance the filters to find more</h3>
+     <h3>Please change the filters to find more or create one</h3>
     </>
   )
 }
