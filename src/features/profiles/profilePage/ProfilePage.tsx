@@ -25,18 +25,22 @@ interface IProfilePageProps extends RouteComponentProps<IProfilePageParams> {}
 
 const ProfilePage: React.FC<IProfilePageProps> = ({ match }) => {
   const dispatch = useDispatch();
-  const { selectedProfile } = useSelector<IRootState, IProfileState>(
-    (state) => state.profile
-  );
+  const { selectedProfile, currentUserProfile } = useSelector<
+    IRootState,
+    IProfileState
+  >((state) => state.profile);
   const { currentUser } = useSelector<IRootState, any>((state) => state.auth);
   const { isLoading, error } = useSelector<IRootState, IAsyncState>(
     (state) => state.async
   );
+  const profile =
+    match.params.id === currentUser?.uid ? currentUserProfile : selectedProfile;
 
   useFirestoreDoc({
     query: () => getUserProfile(match.params.id),
     data: (profile: any) => dispatch(listenToSelectedUserProfile(profile)),
     deps: [dispatch, match.params.id],
+    shouldExecute: match.params.id !== currentUser?.uid,
   });
 
   useEffect(() => {
@@ -45,21 +49,20 @@ const ProfilePage: React.FC<IProfilePageProps> = ({ match }) => {
     };
   }, [dispatch]);
 
-  
-  return (isLoading && !selectedProfile) || (!selectedProfile && !error) ? (
+  return (isLoading && !profile) || (!profile && !error) ? (
     <LoadingComponent content='Loading profile...' />
-  ) : !selectedProfile ? (
-    <h1>No profile {match.params.id}</h1>
+  ) : !profile ? (
+    <h1>No profile found</h1>
   ) : (
     <Grid>
       <Grid.Column width={16}>
         <ProfileHeader
-          profile={selectedProfile}
-          isCurrentUser={currentUser?.uid === selectedProfile.id}
+          profile={profile}
+          isCurrentUser={currentUser?.uid === profile.id}
         />
         <ProfileContent
-          profile={selectedProfile}
-          isCurrentUser={currentUser?.uid === selectedProfile.id}
+          profile={profile}
+          isCurrentUser={currentUser?.uid === profile.id}
         />
       </Grid.Column>
     </Grid>

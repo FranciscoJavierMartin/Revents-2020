@@ -1,5 +1,3 @@
-import { LOCATION_CHANGE } from 'connected-react-router';
-
 export enum eventActionsName {
   FETCH_EVENTS = 'FETCH_EVENTS',
   CREATE_EVENT = 'CREATE_EVENT',
@@ -9,6 +7,9 @@ export enum eventActionsName {
   CLEAR_COMMENTS = 'CLEAR_COMMENTS',
   LISTEN_TO_SELECTED_EVENT = 'LISTEN_TO_SELECTED_EVENT',
   CLEAR_EVENTS = 'CLEAR_EVENTS',
+  SET_FILTER = 'SET_FILTER',
+  SET_START_DATE = 'SET_START_DATE',
+  RETAIN_STATE = 'RETAIN_STATE',
 }
 
 export enum authActionName {

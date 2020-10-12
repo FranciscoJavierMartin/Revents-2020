@@ -3,6 +3,7 @@ import {
   fetchEventsFromFirestore,
 } from '../../api/firestore/firestoreService';
 import { eventActionsName } from '../../common/constants/actionsNames';
+import { FilterValueType } from '../../common/constants/customTypes';
 import { IEventAction } from '../../common/interfaces/actions';
 import { IComment, IEvent } from '../../common/interfaces/models';
 import {
@@ -12,15 +13,17 @@ import {
 } from '../async/asyncActions';
 
 export function fetchEvents(
-  predicate: any,
+  filter: FilterValueType,
+  startDate: Date,
   limit: number,
-  lastDocSnapshot: any
+  lastDocSnapshot?: any
 ) {
   return async function (dispatch: any) {
     dispatch(asyncActionStart());
     try {
       const snapshot = await fetchEventsFromFirestore(
-        predicate,
+        filter,
+        startDate,
         limit,
         lastDocSnapshot
       ).get();
@@ -32,7 +35,6 @@ export function fetchEvents(
         payload: { events, moreEvents, lastVisible },
       });
       dispatch(asyncActionFinish());
-      return lastVisible;
     } catch (error) {
       dispatch(asyncActionError(error));
     }
@@ -78,4 +80,24 @@ export function clearEvents(): IEventAction {
   return {
     type: eventActionsName.CLEAR_EVENTS,
   };
+}
+
+export function setFilter(value: FilterValueType) {
+  return function (dispatch: any) {
+    dispatch(clearEvents());
+    dispatch({ type: eventActionsName.SET_FILTER, payload: value });
+  };
+}
+
+export function setStartDate(date: Date) {
+  return function (dispatch: any) {
+    dispatch(clearEvents());
+    dispatch({ type: eventActionsName.SET_START_DATE, payload: date });
+  };
+}
+
+export function setRetainState(){
+  return {
+    type: eventActionsName.RETAIN_STATE
+  }
 }

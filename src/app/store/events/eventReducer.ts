@@ -9,6 +9,10 @@ const initialState: IEventsState = {
   comments: [],
   moreEvents: false,
   selectedEvent: null,
+  lastVisible: null,
+  filter: 'all',
+  startDate: new Date(),
+  retainState: false,
 };
 
 export default function eventReducer(
@@ -22,6 +26,7 @@ export default function eventReducer(
         ...state,
         events: [...state.events, ...payload.events],
         moreEvents: payload.moreEvents,
+        lastVisible: payload.lastVisible,
       };
       break;
     case eventActionsName.LISTEN_TO_SELECTED_EVENT:
@@ -74,6 +79,29 @@ export default function eventReducer(
         ...state,
         events: [],
         moreEvents: true,
+        lastVisible: null,
+      };
+      break;
+    case eventActionsName.SET_FILTER:
+      res = {
+        ...state,
+        retainState: false,
+        moreEvents: true,
+        filter: payload,
+      };
+      break;
+    case eventActionsName.SET_START_DATE:
+      res = {
+        ...state,
+        retainState: false,
+        moreEvents: true,
+        startDate: payload,
+      };
+      break;
+    case eventActionsName.RETAIN_STATE:
+      res = {
+        ...state,
+        retainState: true,
       };
       break;
     default:

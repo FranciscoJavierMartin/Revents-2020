@@ -5,45 +5,56 @@ import {
   FilterKeyType,
   FilterValueType,
 } from '../../../app/common/constants/customTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  IEventsState,
+  IRootState,
+} from '../../../app/common/interfaces/states';
+import {
+  setFilter,
+  setStartDate,
+} from '../../../app/store/events/eventActions';
 
 interface IEventFilterProps {
-  predicate: Map<FilterKeyType, FilterValueType>;
-  setPredicate: (key: FilterKeyType, value: FilterValueType) => void;
   isLoading: boolean;
 }
 
-const EventFilters: React.FC<IEventFilterProps> = ({
-  predicate,
-  setPredicate,
-  isLoading,
-}) => {
+const EventFilters: React.FC<IEventFilterProps> = ({ isLoading }) => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector<IRootState, boolean>(
+    (state) => state.auth.authenticated
+  );
+  const { filter, startDate } = useSelector<IRootState, IEventsState>(
+    (state) => state.event
+  );
+
   return (
     <>
       <Menu vertical size='large' style={{ width: '100%' }}>
         <Header icon='filter' attached color='teal' content='Filters' />
         <Menu.Item
           content='All Events'
-          active={predicate.get('filter') === 'all'}
-          onClick={() => setPredicate('filter', 'all')}
+          active={filter === 'all'}
+          onClick={() => dispatch(setFilter('all'))}
           disabled={isLoading}
         />
         <Menu.Item
           content="I'm going"
-          active={predicate.get('filter') === 'isGoing'}
-          onClick={() => setPredicate('filter', 'isGoing')}
+          active={filter === 'isGoing'}
+          onClick={() => dispatch(setFilter('isGoing'))}
           disabled={isLoading}
         />
         <Menu.Item
           content="I'm hosting"
-          active={predicate.get('filter') === 'isHosting'}
-          onClick={() => setPredicate('filter', 'isHosting')}
+          active={filter === 'isHosting'}
+          onClick={() => dispatch(setFilter('isHosting'))}
           disabled={isLoading}
         />
       </Menu>
       <Header icon='calendar' attached color='teal' content='Select date' />
       <Calendar
-        onChange={(date) => setPredicate('startDate', date as Date)}
-        value={predicate.get('startDate') as Date || new Date()}
+        onChange={(date) => dispatch(setStartDate(date as Date))}
+        value={startDate || new Date()}
         tileDisabled={() => isLoading}
       />
     </>

@@ -20,9 +20,10 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
   const isLoading = useSelector<IRootState, boolean>(
     (state) => state.async.isLoading
   );
-  const currentUserId = useSelector<IRootState, string | undefined>(
-    (state) => state.auth.currentUser.uid
+  const currentUserId = useSelector<IRootState, any>(
+    (state) => state.auth.currentUser?.uid
   );
+
   return (
     <Segment.Group>
       <Segment>
@@ -75,7 +76,14 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
             loading={isLoading}
             onClick={() => deleteEventInFirestore(event.id)}
           />
-        )}
+         )}
+        <Button
+          color='red'
+          floated='right'
+          content='Delete'
+          loading={isLoading}
+          onClick={() => deleteEventInFirestore(event.id)}
+        />
         <Button
           as={Link}
           to={`${EVENT_DETAIL_PAGE_ROUTE}/${event.id}`}

@@ -40,7 +40,8 @@ export function dataFromSnapshot(snapshot: any) {
 }
 
 export function fetchEventsFromFirestore(
-  predicate: Map<FilterKeyType, FilterValueType>,
+  filter: FilterValueType,
+  startDate: Date,
   limit: number,
   lastDocSnapshot = null
 ): firebase.firestore.Query<firebase.firestore.DocumentData> {
@@ -52,19 +53,19 @@ export function fetchEventsFromFirestore(
     .startAfter(lastDocSnapshot)
     .limit(limit);
 
-  switch (predicate.get('filter')) {
+  switch (filter) {
     case 'isGoing':
       eventsRef = eventsRef
         .where('attendeeIds', 'array-contains', user?.uid)
-        .where('date', '>=', predicate.get('startDate'));
+        .where('date', '>=', startDate);
       break;
     case 'isHosting':
       eventsRef = eventsRef
         .where('hostUid', '==', user?.uid)
-        .where('date', '>=', predicate.get('startDate'));
+        .where('date', '>=', startDate);
       break;
     default:
-      eventsRef = eventsRef.where('date', '>=', predicate.get('startDate'));
+      eventsRef = eventsRef.where('date', '>=', startDate);
   }
 
   return eventsRef;

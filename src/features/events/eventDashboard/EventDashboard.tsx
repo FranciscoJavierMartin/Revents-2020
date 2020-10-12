@@ -11,6 +11,7 @@ import EventFilters from './EventFilters';
 import {
   clearEvents,
   fetchEvents,
+  setRetainState,
 } from '../../../app/store/events/eventActions';
 import {
   FilterKeyType,
@@ -24,49 +25,36 @@ interface IEventDashboardProps {}
 const EventDashboard: React.FC<IEventDashboardProps> = () => {
   const limit = 2;
   const dispatch = useDispatch();
-  const { events, moreEvents } = useSelector<IRootState, IEventsState>(
-    (state) => state.event
-  );
+  const {
+    events,
+    moreEvents,
+    filter,
+    startDate,
+    lastVisible,
+    retainState,
+  } = useSelector<IRootState, IEventsState>((state) => state.event);
   const isLoadingEvents = useSelector<IRootState, boolean>(
     (state) => state.async.isLoading
   );
   const isAuthenticated = useSelector<IRootState, boolean>(
     (state) => state.auth.authenticated
   );
-  const [lastDocSnapshot, setLastSnapshot] = useState<any>(null);
   const [isInitialLoading, setIsInitialLoading] = useState<boolean>(false);
-  const [predicate, setPredicate] = useState(
-    new Map<FilterKeyType, FilterValueType>([
-      ['startDate', new Date()],
-      ['filter', 'all'],
-    ])
-  );
-
-  function handleSetPredicate(key: FilterKeyType, value: FilterValueType) {
-    dispatch(clearEvents());
-    setLastSnapshot(null);
-    setPredicate(new Map(predicate.set(key, value)));
-  }
 
   useEffect(() => {
-    setIsInitialLoading(true);
-    (dispatch(fetchEvents(predicate, limit, lastDocSnapshot)) as any).then(
-      (lastVisible: any) => {
-        setLastSnapshot(lastVisible);
+    if (!retainState) {
+      setIsInitialLoading(true);
+      (dispatch(fetchEvents(filter, startDate, limit)) as any).then(() => {
         setIsInitialLoading(false);
-      }
-    );
+      });
+    }
     return () => {
-      dispatch(clearEvents());
+      dispatch(setRetainState());
     };
-  }, [dispatch, predicate]);
+  }, [dispatch, filter, startDate, retainState]);
 
   function handleFetchNextEvents() {
-    (dispatch(fetchEvents(predicate, limit, lastDocSnapshot)) as any).then(
-      (lastVisible: any) => {
-        setLastSnapshot(lastVisible);
-      }
-    );
+    dispatch(fetchEvents(filter, startDate, limit, lastVisible));
   }
   return (
     <Grid>
@@ -89,11 +77,7 @@ const EventDashboard: React.FC<IEventDashboardProps> = () => {
       </Grid.Column>
       <Grid.Column width={6}>
         {isAuthenticated && <EventsFeed />}
-        <EventFilters
-          predicate={predicate}
-          setPredicate={handleSetPredicate}
-          isLoading={isLoadingEvents}
-        />
+        <EventFilters isLoading={isLoadingEvents} />
       </Grid.Column>
       <Grid.Column width={10}>
         <Loader active={isLoadingEvents} />
