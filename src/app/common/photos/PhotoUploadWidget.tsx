@@ -1,15 +1,35 @@
-import cuid from 'cuid';
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import { Button, Grid, Header } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Step } from 'semantic-ui-react';
+import cuid from 'cuid';
 import { uploadToFirebaseStorage } from '../../api/firestore/firebaseService';
-import { updateUserProfilePhoto } from '../../api/firestore/firestoreService';
 import { getFileExtension } from '../../utils/utils';
-import PhotoWidgetCropper from './PhotoWidgetCropper';
+import { updateUserProfilePhoto } from '../../api/firestore/firestoreService';
 import PhotoWidgetDropzone from './PhotoWidgetDropzone';
+import { toast } from 'react-toastify';
+import PhotoWidgetCropper from './PhotoWidgetCropper';
 
 interface IPhotoUploadWidgetProps {
   setUploadPhotoMode: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface IDropzoneStyles {
+  textAlign:
+    | 'center'
+    | 'inherit'
+    | '-moz-initial'
+    | 'initial'
+    | 'revert'
+    | 'unset'
+    | 'end'
+    | 'justify'
+    | 'left'
+    | 'match-parent'
+    | 'right'
+    | 'start'
+    | undefined;
+  border: string;
+  borderRadius: string;
+  paddingTop: string;
 }
 
 const PhotoUploadWidget: React.FC<IPhotoUploadWidgetProps> = ({
@@ -51,49 +71,87 @@ const PhotoUploadWidget: React.FC<IPhotoUploadWidgetProps> = ({
     setImage(null);
   }
 
+  const dropzoneStyles: IDropzoneStyles = {
+    border: 'dashed 3px #eee',
+    borderRadius: '5%',
+    paddingTop: '30px',
+    textAlign: 'center',
+  };
+
   return (
     <Grid>
-      <Grid.Column width={4}>
-        <Header color='teal' sub content='Step 1 - Add Photo' />
-        <PhotoWidgetDropzone setFiles={setFiles} />
-      </Grid.Column>
-      <Grid.Column width={1} />
-      <Grid.Column width={4}>
-        <Header color='teal' sub content='Step 2 - Resize' />
-        {files.length > 0 && (
-          <PhotoWidgetCropper
-            setImage={setImage}
-            imagePreview={(files[0] as any).preview}
-          />
-        )}
-      </Grid.Column>
-      <Grid.Column width={1} />
-      <Grid.Column width={4}>
-        <Header color='teal' sub content='Step 3 - Preview & upload' />
-        {files.length > 0 && (
-          <>
-            <div
-              className='img-preview'
-              style={{ minHeight: 200, minWidth: 200, overflow: 'hidden' }}
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <Step.Group size='mini' fluid widths={5}>
+            <Step>
+              <Icon name='upload' />
+              <Step.Content>
+                <Step.Title>Add Photo</Step.Title>
+              </Step.Content>
+            </Step>
+            <Step disabled={files.length === 0}>
+              <Icon name='cut' />
+              <Step.Content>
+                <Step.Title>Resize</Step.Title>
+              </Step.Content>
+            </Step>
+            <Step disabled={files.length === 0}>
+              <Icon name='cloud upload' />
+              <Step.Content>
+                <Step.Title>Preview & upload</Step.Title>
+              </Step.Content>
+            </Step>
+          </Step.Group>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row centered>
+        <Grid.Column width={5}>
+          <PhotoWidgetDropzone setFiles={setFiles} />
+        </Grid.Column>
+        <Grid.Column width={5}>
+          {files.length > 0 ? (
+            <PhotoWidgetCropper
+              setImage={setImage}
+              imagePreview={(files[0] as any).preview}
             />
-            <Button.Group>
-              <Button
-                onClick={handleUploadImage}
-                loading={isLoading}
-                style={{ width: 100 }}
-                positive
-                icon='check'
+          ) : (
+            <div style={{ ...dropzoneStyles }}>
+              <Icon name='cut' size='huge' />
+              <Header content='Resize' />
+            </div>
+          )}
+        </Grid.Column>
+        <Grid.Column width={5}>
+          {files.length > 0 ? (
+            <>
+              <div
+                className='img-preview'
+                style={{ minHeight: 200, minWidth: 200, overflow: 'hidden' }}
               />
-              <Button
-                onClick={handleCancelCrop}
-                disabled={isLoading}
-                style={{ width: 100 }}
-                icon='close'
-              />
-            </Button.Group>
-          </>
-        )}
-      </Grid.Column>
+              <Button.Group>
+                <Button
+                  onClick={handleUploadImage}
+                  loading={isLoading}
+                  style={{ width: 100 }}
+                  positive
+                  icon='check'
+                />
+                <Button
+                  onClick={handleCancelCrop}
+                  disabled={isLoading}
+                  style={{ width: 100 }}
+                  icon='close'
+                />
+              </Button.Group>
+            </>
+          ) : (
+            <div style={{ ...dropzoneStyles }}>
+              <Icon name='cloud upload' size='huge' />
+              <Header content='Validate & upload' />
+            </div>
+          )}
+        </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 };

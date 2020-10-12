@@ -52,25 +52,29 @@ const EventsTab: React.FC<IEventsTabProps> = ({ profile, isCurrentUser }) => {
             menu={{ secondary: true, pointing: true }}
           />
           <Card.Group itemsPerRow={5} style={{ marginTop: 10 }}>
-            {events.map((event: IEvent) => (
-              <Card
-                as={Link}
-                to={`${EVENTS_PAGE_ROUTE}/${event.id}`}
-                key={event.id}
-              >
-                <Image
-                  src={`/assets/categoryImages/${event.category}.jpg`}
-                  style={{ minHeight: 100, objectFit: 'cover' }}
-                />
-                <Card.Content>
-                  <Card.Header content={event.title} textAlign='center' />
-                  <Card.Meta textAlign='center'>
-                    <div>{format(event.date, 'dd MMM yyyy')}</div>
-                    <div>{format(event.date, 'hh:mm a')}</div>
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
-            ))}
+            {events.length === 0 ? (
+              <h1>There are not events</h1>
+            ) : (
+              events.map((event: IEvent) => (
+                <Card
+                  as={Link}
+                  to={`${EVENTS_PAGE_ROUTE}/${event.id}`}
+                  key={event.id}
+                >
+                  <Image
+                    src={`/assets/categoryImages/${event.category}.jpg`}
+                    style={{ minHeight: 100, objectFit: 'cover' }}
+                  />
+                  <Card.Content>
+                    <Card.Header content={event.title} textAlign='center' />
+                    <Card.Meta textAlign='center'>
+                      <div>{format(event.date, 'dd MMM yyyy')}</div>
+                      <div>{format(event.date, 'hh:mm a')}</div>
+                    </Card.Meta>
+                  </Card.Content>
+                </Card>
+              ))
+            )}
           </Card.Group>
         </Grid.Column>
       </Grid>

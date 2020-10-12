@@ -85,7 +85,9 @@ const PhotosTab: React.FC<IAboutTabProps> = ({ profile, isCurrentUser }) => {
         </Grid.Column>
         <Grid.Column width={16}>
           {uploadPhotoMode ? (
-            <PhotoUploadWidget setUploadPhotoMode={setUploadPhotoMode} />
+            <PhotoUploadWidget
+              setUploadPhotoMode={setUploadPhotoMode}
+            />
           ) : (
             <Card.Group itemsPerRow={5}>
               {photos.map((photo) => (
