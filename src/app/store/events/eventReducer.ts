@@ -82,6 +82,12 @@ export default function eventReducer(
         lastVisible: null,
       };
       break;
+    case eventActionsName.CLEAR_SELECTED_EVENT:
+      res = {
+        ...state,
+        selectedEvent: null,
+      }
+      break;
     case eventActionsName.SET_FILTER:
       res = {
         ...state,

@@ -1,17 +1,21 @@
 /* global google */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Segment, Header, Button, Confirm } from 'semantic-ui-react';
 import { Formik, Form } from 'formik';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import {
+  CREATE_EVENT_PAGE_ROUTE,
   ERROR_PAGE_ROUTE,
   EVENTS_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
 } from '../../../app/common/constants/routes';
 import { useDispatch, useSelector } from 'react-redux';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
-import { listenToSelectedEvent } from '../../../app/store/events/eventActions';
+import {
+  clearSelectedEvent,
+  listenToSelectedEvent,
+} from '../../../app/store/events/eventActions';
 import * as Yup from 'yup';
 import InputText from '../../../app/common/form/InputText';
 import InputTextArea from '../../../app/common/form/InputTextArea';
@@ -35,7 +39,7 @@ interface IEventFormParams {
 
 interface IEventFormProps extends RouteComponentProps<IEventFormParams> {}
 
-const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
+const EventForm: React.FC<IEventFormProps> = ({ history, match, location }) => {
   const dispatch = useDispatch();
   const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
@@ -95,8 +99,16 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
     query: () => listenToEventFromFirestore(match.params.id),
     data: (event: any) => dispatch(listenToSelectedEvent(event)),
     deps: [match.params.id, dispatch],
-    shouldExecute: !!match.params.id,
+    shouldExecute:
+      match.params.id !== event?.id &&
+      location.pathname !== CREATE_EVENT_PAGE_ROUTE,
   });
+
+  useEffect(() => {
+    if (location.pathname === CREATE_EVENT_PAGE_ROUTE) {
+      dispatch(clearSelectedEvent());
+    }
+  }, [dispatch, location.pathname]);
 
   return isLoading ? (
     <LoadingComponent content='Loading event ...' />
@@ -106,6 +118,7 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
     <Segment clearing>
       <Header content={event ? 'Edit event' : 'Create new event'} />
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
@@ -155,6 +168,7 @@ const EventForm: React.FC<IEventFormProps> = ({ history, match }) => {
               showTimeSelect
               timeCaption='time'
               dateFormat='MMMM d, yyyy h:mm a'
+              autoComplete='off'
             />
             {event && (
               <Button

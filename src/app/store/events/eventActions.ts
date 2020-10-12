@@ -82,6 +82,12 @@ export function clearEvents(): IEventAction {
   };
 }
 
+export function clearSelectedEvent(): IEventAction {
+  return {
+    type: eventActionsName.CLEAR_SELECTED_EVENT,
+  };
+}
+
 export function setFilter(value: FilterValueType) {
   return function (dispatch: any) {
     dispatch(clearEvents());

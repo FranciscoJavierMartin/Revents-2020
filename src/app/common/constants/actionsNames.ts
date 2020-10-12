@@ -10,6 +10,7 @@ export enum eventActionsName {
   SET_FILTER = 'SET_FILTER',
   SET_START_DATE = 'SET_START_DATE',
   RETAIN_STATE = 'RETAIN_STATE',
+  CLEAR_SELECTED_EVENT = 'CLEAR_SELECTED_EVENT',
 }
 
 export enum authActionName {

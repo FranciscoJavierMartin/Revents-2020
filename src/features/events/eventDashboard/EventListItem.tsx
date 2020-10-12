@@ -78,13 +78,6 @@ const EventListItem: React.FC<EventListItemProps> = ({ event }) => {
           />
          )}
         <Button
-          color='red'
-          floated='right'
-          content='Delete'
-          loading={isLoading}
-          onClick={() => deleteEventInFirestore(event.id)}
-        />
-        <Button
           as={Link}
           to={`${EVENT_DETAIL_PAGE_ROUTE}/${event.id}`}
           color='teal'
