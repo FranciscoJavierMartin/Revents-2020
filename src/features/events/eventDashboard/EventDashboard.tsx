@@ -9,14 +9,9 @@ import {
 import EventListItemPlaceholder from './EventListItemPlaceholder';
 import EventFilters from './EventFilters';
 import {
-  clearEvents,
   fetchEvents,
   setRetainState,
 } from '../../../app/store/events/eventActions';
-import {
-  FilterKeyType,
-  FilterValueType,
-} from '../../../app/common/constants/customTypes';
 import NoEvents from './NoEvents';
 import EventsFeed from './EventsFeed';
 

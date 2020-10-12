@@ -1,7 +1,4 @@
-import {
-  FilterKeyType,
-  FilterValueType,
-} from '../../common/constants/customTypes';
+import { FilterValueType } from '../../common/constants/customTypes';
 import {
   EVENTS_COLLECTION_NAME,
   FOLLOWING_COLLECTION_NAME,

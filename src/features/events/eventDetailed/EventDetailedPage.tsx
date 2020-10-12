@@ -8,7 +8,7 @@ import { IEvent } from '../../../app/common/interfaces/models';
 import { IAsyncState, IRootState } from '../../../app/common/interfaces/states';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { fetchEvents, listenToSelectedEvent } from '../../../app/store/events/eventActions';
+import { listenToSelectedEvent } from '../../../app/store/events/eventActions';
 import EventDetailedChat from './EventDetailedChat';
 import EventDetailedHeader from './EventDetailedHeader';
 import EventDetailedInfo from './EventDetailedInfo';

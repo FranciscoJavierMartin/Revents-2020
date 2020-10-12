@@ -7,8 +7,6 @@ import * as Yup from 'yup';
 import { signInWithEmailAndPassword } from '../../app/api/firestore/firebaseService';
 import { EVENTS_PAGE_ROUTE } from '../../app/common/constants/routes';
 import SocialLogin from './SocialLogin';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../app/common/interfaces/states';
 
 interface IFormValues {
   email: string;
@@ -24,7 +22,6 @@ const LoginPage: React.FC<any> = () => {
     email: Yup.string().required().email(),
     password: Yup.string().required(),
   });
-  const { prevLocation } = useSelector<IRootState, any>((state) => state.auth);
 
   return (
     <div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Grid, Icon, Segment } from 'semantic-ui-react';
 import { IEvent } from '../../../app/common/interfaces/models';
 import { format } from 'date-fns';
-import EventDetailedMap from './EventDetailedMap';
+//import EventDetailedMap from './EventDetailedMap';
 
 interface IEventDetailedInfoProps {
   event: IEvent;

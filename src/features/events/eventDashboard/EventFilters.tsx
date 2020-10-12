@@ -1,10 +1,6 @@
 import React from 'react';
 import { Header, Menu } from 'semantic-ui-react';
 import Calendar from 'react-calendar';
-import {
-  FilterKeyType,
-  FilterValueType,
-} from '../../../app/common/constants/customTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   IEventsState,
@@ -21,9 +17,6 @@ interface IEventFilterProps {
 
 const EventFilters: React.FC<IEventFilterProps> = ({ isLoading }) => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector<IRootState, boolean>(
-    (state) => state.auth.authenticated
-  );
   const { filter, startDate } = useSelector<IRootState, IEventsState>(
     (state) => state.event
   );
